@@ -7,12 +7,12 @@ import {
 
 import { logout, type User } from "../services/auth";
 import toast from "react-hot-toast";
+import { FaSignOutAlt } from "react-icons/fa";
 
 export const Route = createRootRouteWithContext<User>()({
   component: RootComponent,
   loader: async ({ context }) => {
     const user = await context.getCurrentUser().catch(() => null);
-    console.log(user);
     return { user };
   },
 });
@@ -51,9 +51,9 @@ function RootComponent() {
                       window.location.href = "/home";
                     });
                   }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150"
+
                 >
-                  Logout
+                  <FaSignOutAlt className="text-gray-600 hover:text-blue-600 cursor-pointer" />
                 </button>
               ) : (
                 <>

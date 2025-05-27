@@ -27,8 +27,8 @@ function RouteComponent() {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-sm">
+    <div className=" flex items-center justify-center py-[100px] px-4 sm:px-6 lg:px-8 bg-[#0E5F8C]">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-sm ">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">Sign In</h2>
           <p className="mt-2 text-gray-500">Welcome back</p>
@@ -111,7 +111,7 @@ function RouteComponent() {
           <button
             type="submit"
             disabled={pending}
-            className="w-full py-3 px-4 border border-transparent rounded-lg text-white bg-violet-500 hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
+            className="w-full py-3 px-4 border border-transparent rounded-lg text-white bg-violet-500 hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 cursor-pointer"
           >
             Sign In
           </button>
@@ -155,7 +155,7 @@ function RouteComponent() {
             <button
               type="button"
               onClick={() => navigate({ to: "/signup" })}
-              className="font-medium text-violet-500 hover:text-violet-600"
+              className="font-medium text-violet-500 hover:text-violet-600 hover:underline cursor-pointer"
             >
               Sign Up
             </button>

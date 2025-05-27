@@ -35,4 +35,11 @@ export const logout = async () => {
   return response.data;
 };
 
+
+export const refreshToken = async () => {
+  const response = await instance.post("/api/auth/refresh-token");
+  console.log(response.data);
+  return response.data;
+};
+
 export type User = Awaited<ReturnType<typeof getCurrentUser>>;
