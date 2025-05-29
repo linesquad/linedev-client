@@ -13,8 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignupImport } from './routes/signup'
 import { Route as SigninImport } from './routes/signin'
-import { Route as HomeImport } from './routes/home'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 
 // Create/Update Routes
@@ -31,14 +31,14 @@ const SigninRoute = SigninImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const HomeRoute = HomeImport.update({
-  id: '/home',
-  path: '/home',
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthenticatedRoute = AuthenticatedImport.update({
-  id: '/_authenticated',
+const IndexRoute = IndexImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -52,18 +52,18 @@ const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedImport
-      parentRoute: typeof rootRoute
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeImport
       parentRoute: typeof rootRoute
     }
     '/signin': {
@@ -105,16 +105,16 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
-  '/home': typeof HomeRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
 }
 
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
-  '/home': typeof HomeRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -122,8 +122,8 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/home': typeof HomeRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -131,13 +131,13 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/home' | '/signin' | '/signup' | '/profile'
+  fullPaths: '/' | '' | '/signin' | '/signup' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/home' | '/signin' | '/signup' | '/profile'
+  to: '/' | '' | '/signin' | '/signup' | '/profile'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
-    | '/home'
     | '/signin'
     | '/signup'
     | '/_authenticated/profile'
@@ -145,15 +145,15 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  HomeRoute: typeof HomeRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  HomeRoute: HomeRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
 }
@@ -168,20 +168,20 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/_authenticated",
-        "/home",
         "/signin",
         "/signup"
       ]
+    },
+    "/": {
+      "filePath": "index.tsx"
     },
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
         "/_authenticated/profile"
       ]
-    },
-    "/home": {
-      "filePath": "home.tsx"
     },
     "/signin": {
       "filePath": "signin.tsx"

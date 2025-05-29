@@ -12,7 +12,7 @@ export const Route = createFileRoute("/signup")({
   loader: async () => {
     const user = await getCurrentUser().catch(() => null);
     if (user) {
-      return redirect({ to: "/home" });
+      return redirect({ to: "/" });
     }
   },
 });
@@ -41,7 +41,7 @@ function RouteComponent() {
               try {
                 await signUp(name!, email, password);
                 toast.success("Register successful, please login");
-                navigate({ to: "/home" });
+                navigate({ to: "/" });
               } catch (error) {
                 console.error(error);
                 setError("Registration failed");

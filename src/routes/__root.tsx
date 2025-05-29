@@ -20,7 +20,7 @@ function RootComponent() {
     React.startTransition(async () => {
       await logout();
       toast.success("Logged out successfully");
-      window.location.href = "/home";
+      window.location.href = "/";
     });
   }, []);
 

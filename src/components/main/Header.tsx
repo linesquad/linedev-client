@@ -19,7 +19,7 @@ function Header({ user, onLogout }: HeaderProps) {
         <nav className="lg:static lg:flex lg:mx-auto lg:bg-transparent">
           <div className="relative z-2 flex items-center justify-center m-auto lg:flex-row">
             <Link
-              to="/home"
+              to="/"
               className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:-mr-0.25 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12"
             >
               Home

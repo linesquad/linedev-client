@@ -12,7 +12,7 @@ export const Route = createFileRoute("/signin")({
   loader: async () => {
     const user = await getCurrentUser().catch(() => null);
     if (user) {
-      return redirect({ to: "/home" });
+      return redirect({ to: "/" });
     }
   },
 });
@@ -41,7 +41,7 @@ function RouteComponent() {
               try {
                 await signIn(email, password);
                 toast.success("Login successful");
-                navigate({ to: "/home" });
+                navigate({ to: "/" });
               } catch (error) {
                 console.error(error);
                 setError("Invalid email or password");
