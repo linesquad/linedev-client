@@ -7,7 +7,7 @@ function Hero() {
         <img 
           src="/hero-background.jpg" 
           alt="background"
-          className="w-full h-full opacity-80 "
+          className="w-full h-full"
         />
       </div>
 

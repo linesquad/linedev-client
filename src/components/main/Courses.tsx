@@ -4,6 +4,10 @@ function Courses() {
   return (
     <div className="text-white p-8 mt-16 relative overflow-hidden">
       <div className="relative z-10">
+        <div className="absolute inset-0 w-full h-full top-30">
+          <div className="absolute top-20 right-50 aspect-square bg-radial-gradient bg-[#171435] rounded-full w-[300px] h-[300px] blur-2xl"></div>
+          <div className="absolute bottom-20 left-50 aspect-square bg-radial-gradient bg-[#171435] rounded-full w-[300px] h-[300px] blur-2xl"></div>
+        </div>
         <h1 className="text-5xl text-center mb-16 bg-gradient-to-r text-white bg-clip-text">
           Grab your desired one
         </h1>
@@ -18,7 +22,7 @@ function Courses() {
               </div>
 
               <div className="relative z-10">
-                <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r text-white bg-clip-text">{course.title}</h2>
+                <h2 className="text-2xl mb-4 bg-gradient-to-r text-white bg-clip-text">{course.title}</h2>
                 <p className="text-gray-300">{course.description}</p>
               </div>
               <div className="flex items-center mt-6 relative z-10">
