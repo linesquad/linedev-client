@@ -32,8 +32,8 @@ export const heroLogo = [
 ];
 
 export const heroIcons = [
-  "/linedev.jpeg",
-  "/linedev.jpeg",  
-  "/linedev.jpeg",
-  "/linedev.jpeg",
+  "/search-md.svg",
+  "/file-02.svg",  
+  "/home-smile.svg",
+  "/plus-square.svg",
 ]

@@ -89,7 +89,7 @@ function Hero() {
 
         <div className="grid grid-cols-3 md:grid-cols-6 text-white items-center gap-4 w-full">
           {heroLogo.map((logo) => (
-            <div key={logo.id} className="flex items-center  gap-2">
+            <div key={logo.id} className="flex justify-center items-center gap-2">
               <img src={logo.image} alt={logo.name} />
               <p className="text-sm">{logo.name}</p>
             </div>
