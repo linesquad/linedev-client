@@ -1,6 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { FaSignOutAlt } from "react-icons/fa";
+import {
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+  FaUser,
+  FaArrowRight,
+} from "react-icons/fa";
 import type { User } from "../../services/auth";
+import { useState, useEffect } from "react";
 
 interface HeaderProps {
   user: User | null;
@@ -8,87 +15,187 @@ interface HeaderProps {
 }
 
 function Header({ user, onLogout }: HeaderProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="fixed top-0 left-0 w-full z-50 border-b border-n-6 lg:bg-n-8/90 lg:backdrop-blur-sm bg-n-8/90 backdrop-blur-sm bg-[#0E0C15] text-gray-400 py-4">
-      <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4">
-        <div className="w-[12rem] xl:mr-8 flex items-center gap-2">
-          <div className="w-[90px] h-[40px] rounded-full bg-n-8"></div>
-          <h1 className="text-lg tracking-wide text-n-10">LineDevLTD</h1>
+    <div
+      className={`fixed top-0 left-0 w-full z-50 border-b border-gray-900 bg-[#0E0C15]/90 backdrop-blur-sm text-gray-400 transition-all duration-300 ${scrolled ? "py-2" : "py-4"}`}
+    >
+      <div className="flex items-center justify-between px-4 sm:px-5 lg:px-7.5 xl:px-10 max-lg:py-2">
+        <div className="flex items-center gap-2 flex-1">
+          <img src="/lineMainLogo.png" alt="LineDevLTD" className="w-10 h-10" />
+          <Link to="/">
+            <h1 className="text-base sm:text-lg tracking-wide text-n-10">
+              LineDevLTD
+            </h1>
+          </Link>
         </div>
 
-        <nav className="lg:static lg:flex lg:mx-auto lg:bg-transparent">
-          <div className="relative z-2 flex items-center justify-center m-auto lg:flex-row">
+        <button
+          className="lg:hidden text-white text-2xl z-50 absolute right-4"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        <nav className="hidden lg:flex flex-1 justify-center">
+          <div className="flex items-center justify-center">
             <Link
               to="/"
-              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:-mr-0.25 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12"
+              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
             >
               Home
             </Link>
             <Link
               to="/profile"
-              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:-mr-0.25 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12"
+              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
+            >
+              Profile
+            </Link>
+            <Link
+              to="/profile"
+              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
+            >
+              Profile
+            </Link>
+            <Link
+              to="/profile"
+              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
             >
               Profile
             </Link>
           </div>
         </nav>
 
-        <div className="flex items-center ml-auto space-x-4">
+        <div
+          className={`fixed top-0 left-0 w-full h-screen bg-[#0E0C15] transform transition-transform duration-300 ease-in-out lg:hidden z-40 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+        >
+          <div className="flex flex-col items-center justify-center h-full space-y-8">
+            <Link
+              to="/"
+              className="block font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 py-3"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              to="/profile"
+              className="block font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 py-3"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Profile
+            </Link>
+            {!user && (
+              <>
+                <Link
+                  to="/signin"
+                  className="group relative w-48 overflow-hidden rounded-full bg-gradient-to-r from-purple-600 to-pink-600 p-0.5 text-white shadow-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-purple-700 hover:to-pink-700"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <div className="relative flex items-center justify-center gap-2 rounded-full bg-[#0E0C15] px-6 py-2.5 transition-all duration-300 group-hover:bg-transparent">
+                    <FaUser className="h-5 w-5" />
+                    <span className="font-medium ">Sign In</span>
+                  </div>
+                </Link>
+                <Link
+                  to="/signup"
+                  className="group relative w-48 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-teal-500 p-0.5 text-white shadow-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-600"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <div className="relative flex items-center justify-center gap-2 rounded-full bg-[#0E0C15] px-6 py-2.5 transition-all duration-300 group-hover:bg-transparent">
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      ></path>
+                    </svg>
+                    <span className="font-medium">Sign Up</span>
+                  </div>
+                </Link>
+              </>
+            )}
+            {user && (
+              <button
+                onClick={() => {
+                  onLogout();
+                  setIsMenuOpen(false);
+                }}
+                className="group relative w-48 overflow-hidden rounded-full bg-gradient-to-r from-red-500 to-orange-500 p-0.5 text-white shadow-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-red-600 hover:to-orange-600"
+              >
+                <div className="relative flex items-center justify-center gap-2 rounded-full bg-[#0E0C15] px-6 py-2.5 transition-all duration-300 group-hover:bg-transparent">
+                  <FaSignOutAlt className="h-5 w-5" />
+                  <span className="font-medium">Sign Out</span>
+                </div>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="hidden lg:flex items-center justify-end flex-1 space-x-4">
           {user ? (
-            <button onClick={onLogout} className="p-2">
-              <FaSignOutAlt className="text-n-1/50 hover:text-n-1 cursor-pointer" />
+            <button
+              onClick={onLogout}
+              className="group relative overflow-hidden rounded-full bg-gradient-to-r from-red-500 to-orange-500 p-0.5 text-white shadow-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-red-600 hover:to-orange-600"
+            >
+              <div className="relative flex items-center justify-center gap-2 rounded-full bg-[#0E0C15] px-5 py-2 transition-all duration-300 group-hover:bg-transparent">
+                <FaSignOutAlt className="h-4 w-4" />
+                <span className="hidden xl:block font-medium text-sm">
+                  Sign Out
+                </span>
+              </div>
             </button>
           ) : (
             <>
               <Link
                 to="/signin"
-                className="relative inline-flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-white transition duration-300 ease-out border-2 border-white rounded-full shadow-md group"
+                className="group relative overflow-hidden rounded-full bg-gradient-to-r from-purple-600 to-pink-600 p-0.5 text-white shadow-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-purple-700 hover:to-pink-700"
               >
-                <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#1d1228] group-hover:translate-x-0 ease">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    ></path>
-                  </svg>
-                </span>
-                <span className="absolute flex items-center justify-center w-full h-full text-white transition-all duration-300 transform group-hover:translate-x-full ease">
-                  Sign In
-                </span>
-                <span className="relative invisible">Sign In</span>
+                <div className="relative flex items-center justify-center gap-2 rounded-full bg-[#0E0C15] px-5 py-2 transition-all duration-300 group-hover:bg-transparent">
+                  <FaUser className="h-4 w-4" />
+                  <span className="hidden xl:block font-medium text-sm">
+                    Sign In
+                  </span>
+                </div>
               </Link>
               <Link
                 to="/signup"
-                className="relative inline-flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-white transition duration-300 ease-out border-2 border-white rounded-full shadow-md group"
+                className="group relative overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-teal-500 p-0.5 text-white shadow-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-700 hover:to-teal-600"
               >
-                <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#1d1228] group-hover:translate-x-0 ease">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    ></path>
-                  </svg>
-                </span>
-                <span className="absolute flex items-center justify-center w-full h-full text-white transition-all duration-300 transform group-hover:translate-x-full ease">
-                  Sign Up
-                </span>
-                <span className="relative invisible">Sign Up</span>
+                <div className="relative flex items-center justify-center gap-2 rounded-full bg-[#0E0C15] px-5 py-2 transition-all duration-300 group-hover:bg-transparent">
+                  <FaArrowRight className="h-4 w-4" />
+                  <span className="hidden xl:block font-medium text-sm">
+                    Sign Up
+                  </span>
+                </div>
               </Link>
             </>
           )}
