@@ -2,7 +2,7 @@ import { heroLogo } from "../../lib/heroLogo";
 
 function Hero() {
   return (
-    <div className="mt-[70px] py-12 sm:py-16 md:py-20 lg:py-[100px] px-4 sm:px-6 lg:px-8 bg-[#0E0C15] relative">
+    <div className="mt-[70px] py-12 sm:py-16 md:py-20 lg:py-[100px] px-4 sm:px-6 lg:px-8 relative">
       <div className="relative z-1 max-w-[62rem] mx-auto text-center mb-8 sm:mb-12 md:mb-16 lg:mb-[6rem]">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-white">
           <div className="flex flex-col items-center justify-center gap-2 sm:gap-3">
