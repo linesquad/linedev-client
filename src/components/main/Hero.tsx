@@ -1,8 +1,17 @@
 import { heroIcons, heroLogo } from "../../lib/heroLogo";
 import Notification from "../../lib/notification";
-import { ScrollParallax } from "react-just-parallax";
+import { ScrollParallax, MouseParallax } from "react-just-parallax";
+import { useState, useRef, useEffect } from "react";
 
 function Hero() {
+  const [mounted, setMounted] = useState(false);
+  const parallaxRef = useRef(null);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
   return (
     <div className=" py-[200px] px-4 sm:px-6 lg:px-8 relative">
       <div className="absolute inset-0 w-full h-full top-30">
@@ -35,6 +44,87 @@ function Hero() {
           </div>
         </h1>
         <p className="text-base sm:text-lg max-w-3xl mx-auto mb-6 text-gray-300 px-4">
+          <MouseParallax strength={0.07} parallaxContainerRef={parallaxRef}>
+            <div className="absolute -top-12 right-0 w-0.25 h-1/2 origin-bottom rotate-[46deg]">
+              <div
+                className={`w-8 h-8 -ml-1 -mt-36 bg-gradient-to-b from-[#DD734F] to-[#1A1A32] rounded-full transition-transform duration-500 ease-out ${
+                  mounted
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+              >
+                <img
+                  src="/expressCircle.webp"
+                  className="rounded-full"
+                  alt="1"
+                />
+              </div>
+            </div>
+
+            <div className="absolute top-0 -left-50 w-0.25 h-1/2 origin-bottom ">
+              <div
+                className={`w-10 h-10 -ml-1 -mt-32 bg-gradient-to-b from-[#DD734F] to-[#1A1A32] rounded-full transition-transform duration-500 ease-out ${
+                  mounted
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+              >
+                <img src="/Tailwind.svg" className="rounded-full" alt="2" />
+              </div>
+            </div>
+
+            <div className="absolute -bottom-10 -left-10 w-0.25 h-1/2 origin-bottom rotate-[54deg]">
+              <div
+                className={`hidden w-10 h-10 -ml-1 mt-[12.9rem] bg-gradient-to-b from-[#B9AEDF] to-[#1A1A32] rounded-full xl:block transit transition-transform duration-500 ease-out ${
+                  mounted
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+              >
+                <img src="/reactCircle.png" className="rounded-full " alt="3" />
+              </div>
+            </div>
+
+            <div className="absolute bottom-1/2 right-1/3 w-0.25 h-1/2 origin-bottom -rotate-[65deg]">
+              <div
+                className={`w-10 h-10 -ml-1.5 mt-52 bg-gradient-to-b from-[#B9AEDF] to-[#1A1A32] rounded-full transition-transform duration-500 ease-out ${
+                  mounted
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+              >
+                <img src="/tsCircle.png" className="rounded-full" alt="4" />
+              </div>
+            </div>
+
+            <div className="absolute -bottom-10 right-0 w-0.25 h-1/2 origin-bottom -rotate-[65deg]">
+              <div
+                className={`w-10 h-10 -ml-1.5 mt-52 bg-gradient-to-b from-[#B9AEDF] to-[#1A1A32] rounded-full transition-transform duration-500 ease-out ${
+                  mounted
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+              >
+                <img src="/nodeCircle.png" className="rounded-full" alt="4" />
+              </div>
+            </div>
+
+            <div className="absolute top-40 left-20 w-0.25 h-1/2 ">
+              <div
+                className={`w-10 h-10 -ml-3 -mt-3 bg-gradient-to-b from-[#88E5BE] to-[#1A1A32] rounded-full transition-transform duration-500 ease-out ${
+                  mounted
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+              >
+                <img
+                  src="/tanstackCircle.png"
+                  className="rounded-full"
+                  alt="6"
+                />
+              </div>
+            </div>
+          </MouseParallax>
           <div className="flex flex-col items-center justify-center gap-2">
             <span className="whitespace-pre-wrap">
               Get the course with your level and join team and develop your self
@@ -44,8 +134,9 @@ function Hero() {
             </span>
           </div>
         </p>
-        <button className="bg-white text-black font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-lg hover:bg-gray-200 transition-colors text-sm sm:text-base">
-          Connect
+        <button className="bg-white text-[#1A1A32] font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-lg text-sm sm:text-base cursor-pointer relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:scale-105">
+          <span className="absolute inset-0 w-0 bg-gradient-to-r from-[#F0F0F8] via-[#E8E0F0] to-[#a29cb3] group-hover:w-full transition-all duration-700 ease-in-out transform origin-left"></span>
+          <span className="relative z-10">Connect</span>
         </button>
       </div>
 
@@ -89,7 +180,10 @@ function Hero() {
 
         <div className="grid grid-cols-3 md:grid-cols-6 text-white items-center gap-4 w-full">
           {heroLogo.map((logo) => (
-            <div key={logo.id} className="flex justify-center items-center gap-2">
+            <div
+              key={logo.id}
+              className="flex justify-center items-center gap-2"
+            >
               <img src={logo.image} alt={logo.name} />
               <p className="text-sm">{logo.name}</p>
             </div>
