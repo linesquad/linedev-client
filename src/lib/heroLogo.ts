@@ -30,3 +30,10 @@ export const heroLogo = [
     image: "/favicon.svg",
   },
 ];
+
+export const heroIcons = [
+  "/linedev.jpeg",
+  "/linedev.jpeg",  
+  "/linedev.jpeg",
+  "/linedev.jpeg",
+]

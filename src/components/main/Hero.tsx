@@ -1,11 +1,13 @@
-import { heroLogo } from "../../lib/heroLogo";
+import { heroIcons, heroLogo } from "../../lib/heroLogo";
+import Notification from "../../lib/notification";
+import { ScrollParallax } from "react-just-parallax";
 
 function Hero() {
   return (
-    <div className="mt-[70px] py-12 sm:py-16 md:py-20 lg:py-[100px] px-4 sm:px-6 lg:px-8 relative">
+    <div className=" py-[200px] px-4 sm:px-6 lg:px-8 relative">
       <div className="absolute inset-0 w-full h-full top-30">
-        <img 
-          src="/hero-background.jpg" 
+        <img
+          src="/hero-background.jpg"
           alt="background"
           className="w-full h-full"
         />
@@ -47,9 +49,24 @@ function Hero() {
         </button>
       </div>
 
-      <div className="relative w-full max-w-[90%] sm:max-w-[85%] md:max-w-4xl mx-auto">
+      <div className="relative w-full max-w-[90%] sm:max-w-[85%] md:max-w-4xl mx-auto ">
         <div className="relative z-1 p-0.5 rounded-2xl bg-gradient-to-r from-[#E6D28D] to-[#EB8AE7]">
           <div className="relative bg-gradient-to-r from-[#E6D28D] to-[#EB8AE7] rounded-[1rem]">
+            <ScrollParallax isAbsolutelyPositioned>
+              <ul className=" hidden absolute -left-[5.5rem] bottom-[7.5rem] px-1 py-1 bg-[#252132]/30 backdrop-blur-md rounded-2xl xl:flex">
+                {heroIcons.map((icon, i) => (
+                  <li className=" p-4" key={i}>
+                    <img src={icon} alt={icon} width={25} height={25} />
+                  </li>
+                ))}
+              </ul>
+            </ScrollParallax>
+            <ScrollParallax isAbsolutelyPositioned>
+              <Notification
+                title="Code Generation"
+                className="hidden xl:flex text-white absolute top-[35%] -right-20 z-10"
+              />
+            </ScrollParallax>
             <div className="h-[1rem] sm:h-[1.4rem] bg-[#43435C] rounded-t-[0.9rem]" />
             <div className="aspect-[33/40] rounded-b-[0.9rem] overflow-hidden md:aspect-[688/490] lg:aspect-[1024/490]">
               <div className="w-full h-full bg-[#0F0C15]">
