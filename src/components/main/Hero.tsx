@@ -1,3 +1,5 @@
+import { heroLogo } from "../../lib/heroLogo";
+
 function Hero() {
   return (
     <div className="mt-[70px] py-12 sm:py-16 md:py-20 lg:py-[100px] px-4 sm:px-6 lg:px-8 bg-[#0E0C15] relative">
@@ -51,10 +53,22 @@ function Hero() {
               </div>
             </div>
             <div className="flex justify-center flex-col items-center mb-1">
-              <div className="h-[1rem] sm:h-[1.4rem] w-full max-w-[90%] bg-[#1B1B2E] rounded-b-[0.9rem]" />
+              <div className="h-[1rem] sm:h-[1.4rem] w-full max-w-[92%] bg-[#1B1B2E] rounded-b-[0.9rem]" />
               <div className="h-[1rem] sm:h-[1.4rem] w-full max-w-[85%] from-[#593D61] to-[#593D61] bg-gradient-to-r rounded-b-[0.9rem]" />
             </div>
           </div>
+        </div>
+        <p className="text-center text-gray-500 text-sm leading-16 tracking-wider uppercase my-16">
+          Helping people creating beautiful web applications
+        </p>
+
+        <div className="grid grid-cols-3 md:grid-cols-6 text-white items-center gap-4 w-full">
+          {heroLogo.map((logo) => (
+            <div key={logo.id} className="flex items-center  gap-2">
+              <img src={logo.image} alt={logo.name} />
+              <p className="text-sm">{logo.name}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
