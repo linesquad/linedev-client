@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Hero from "../components/main/Hero";
 import Courses from "../components/main/Courses";
 import MainWrapper from "../components/MainWrapper";
+import BorderWrapper from "../components/BorderWrapper";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -10,10 +11,12 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   return (
     <div className="bg-[#0E0C15]">
-      <MainWrapper>
-        <Hero />
-        <Courses />
-      </MainWrapper>
+      <BorderWrapper>
+        <MainWrapper>
+          <Hero />
+          <Courses />
+        </MainWrapper>
+      </BorderWrapper>
     </div>
   );
 }

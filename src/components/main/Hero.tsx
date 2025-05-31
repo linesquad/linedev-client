@@ -1,4 +1,4 @@
-import { heroIcons, heroLogo } from "../../lib/heroLogo";
+import { heroIcons, heroLogo, Rings } from "../../lib/heroLogo";
 import Notification from "../../lib/notification";
 import { ScrollParallax, MouseParallax } from "react-just-parallax";
 import { useState, useRef, useEffect } from "react";
@@ -6,16 +6,6 @@ import { useState, useRef, useEffect } from "react";
 function Hero() {
   const [mounted, setMounted] = useState(false);
   const parallaxRef = useRef(null);
-  const Rings = () => {
-    return (
-      <>
-        <div className="absolute top-1/2 left-1/2 w-[65.875rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2 text-gray-400 opacity-10" />
-        <div className="absolute top-1/2 left-1/2 w-[51.375rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2 text-gray-400 opacity-10" />
-        <div className="absolute top-1/2 left-1/2 w-[36.125rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2 text-gray-400 opacity-10" />
-        <div className="absolute top-1/2 left-1/2 w-[23.125rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2 text-gray-400 opacity-10" />
-      </>
-    );
-  };
 
   useEffect(() => {
     setMounted(true);
