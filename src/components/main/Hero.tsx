@@ -43,7 +43,7 @@ function Hero() {
             </span>
           </div>
         </h1>
-        <p className="text-base sm:text-lg max-w-3xl mx-auto mb-6 text-gray-300 px-4">
+        <div className="hidden xl:block text-base sm:text-lg max-w-3xl mx-auto mb-6 text-gray-300 px-4">
           <MouseParallax strength={0.07} parallaxContainerRef={parallaxRef}>
             <div className="absolute -top-12 right-0 w-0.25 h-1/2 origin-bottom rotate-[46deg]">
               <div
@@ -133,7 +133,7 @@ function Hero() {
               as experienced developer, build special from nothing and enjoy
             </span>
           </div>
-        </p>
+        </div>
         <button className="bg-white text-[#1A1A32] font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-lg text-sm sm:text-base cursor-pointer relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:scale-105">
           <span className="absolute inset-0 w-0 bg-gradient-to-r from-[#F0F0F8] via-[#E8E0F0] to-[#a29cb3] group-hover:w-full transition-all duration-700 ease-in-out transform origin-left"></span>
           <span className="relative z-10">Connect</span>
