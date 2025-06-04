@@ -30,6 +30,11 @@ export const getCurrentUser = async () => {
   return response.data.user.id;
 };
 
+export const getUserRole = async () => {
+  const response = await instance.get("/api/profile/");
+  return response.data.user.role;
+};
+
 export const logout = async () => {
   const response = await instance.post("/api/auth/logout");
   return response.data;
