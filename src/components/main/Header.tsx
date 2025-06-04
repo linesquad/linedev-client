@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import type { User } from "../../services/auth";
 import { useState, useEffect } from "react";
+import { navLinks } from "../../lib/navRoutes";
 
 interface HeaderProps {
   user: User | null;
@@ -61,30 +62,15 @@ function Header({ user, onLogout }: HeaderProps) {
 
         <nav className="hidden lg:flex flex-1 justify-center">
           <div className="flex items-center justify-center">
-            <Link
-              to="/"
-              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
-            >
-              Home
-            </Link>
-            <Link
-              to="/profile"
-              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
-            >
-              Profile
-            </Link>
-            <Link
-              to="/profile"
-              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
-            >
-              Profile
-            </Link>
-            <Link
-              to="/profile"
-              className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
-            >
-              Profile
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="block relative font-code text-xl uppercase text-n-1 transition-colors hover:text-color-1 px-6 py-2 lg:font-semibold lg:text-n-1/50 lg:leading-5 lg:hover:text-n-1 xl:px-12 hover:text-white/80 hover:transition-all duration-300"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </nav>
 
@@ -92,20 +78,16 @@ function Header({ user, onLogout }: HeaderProps) {
           className={`fixed top-0 left-0 w-full h-screen bg-[#0E0C15] transform transition-transform duration-300 ease-in-out lg:hidden z-40 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
         >
           <div className="flex flex-col items-center justify-center h-full space-y-8">
-            <Link
-              to="/"
-              className="block font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 py-3"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/profile"
-              className="block font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 py-3"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Profile
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="block font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 py-3"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
             {!user && (
               <>
                 <Link
