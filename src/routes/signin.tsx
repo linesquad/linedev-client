@@ -1,5 +1,5 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { getCurrentUser, signIn } from "../services/auth";
+import { getCurrentUser, signIn, getUserRole } from "../services/auth";
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -11,9 +11,12 @@ export const Route = createFileRoute("/signin")({
   component: RouteComponent,
   loader: async () => {
     const user = await getCurrentUser().catch(() => null);
+    const role = await getUserRole().catch(() => null);
     if (user) {
-      return redirect({ to: "/" });
-    }
+      console.log(role);
+      throw redirect({ to: `/${role}Dashboard` });
+    } 
+    return {user, role};
   },
 });
 
@@ -39,9 +42,11 @@ function RouteComponent() {
             e.preventDefault();
             startTransition(async () => {
               try {
-                await signIn(email, password);
-                toast.success("Login successful");
-                navigate({ to: "/" });
+                const response = await signIn(email, password);
+                if(response){
+                  navigate({ to: `/${response.role}Dashboard` });
+                  toast.success("Login successful");
+                }
               } catch (error) {
                 console.error(error);
                 setError("Invalid email or password");

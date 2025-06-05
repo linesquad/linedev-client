@@ -16,7 +16,8 @@ import { Route as SigninImport } from './routes/signin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
-import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticateddashboardMiddleDashboardImport } from './routes/_authenticated/(dashboard)/middleDashboard'
+import { Route as AuthenticateddashboardJuniorDashboardImport } from './routes/_authenticated/(dashboard)/juniorDashboard'
 
 // Create/Update Routes
 
@@ -49,11 +50,19 @@ const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const AuthenticatedDashboardRoute = AuthenticatedDashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
+const AuthenticateddashboardMiddleDashboardRoute =
+  AuthenticateddashboardMiddleDashboardImport.update({
+    id: '/(dashboard)/middleDashboard',
+    path: '/middleDashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticateddashboardJuniorDashboardRoute =
+  AuthenticateddashboardJuniorDashboardImport.update({
+    id: '/(dashboard)/juniorDashboard',
+    path: '/juniorDashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -87,18 +96,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardImport
-      parentRoute: typeof AuthenticatedImport
-    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/(dashboard)/juniorDashboard': {
+      id: '/_authenticated/(dashboard)/juniorDashboard'
+      path: '/juniorDashboard'
+      fullPath: '/juniorDashboard'
+      preLoaderRoute: typeof AuthenticateddashboardJuniorDashboardImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/(dashboard)/middleDashboard': {
+      id: '/_authenticated/(dashboard)/middleDashboard'
+      path: '/middleDashboard'
+      fullPath: '/middleDashboard'
+      preLoaderRoute: typeof AuthenticateddashboardMiddleDashboardImport
       parentRoute: typeof AuthenticatedImport
     }
   }
@@ -107,13 +123,17 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticateddashboardJuniorDashboardRoute: typeof AuthenticateddashboardJuniorDashboardRoute
+  AuthenticateddashboardMiddleDashboardRoute: typeof AuthenticateddashboardMiddleDashboardRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticateddashboardJuniorDashboardRoute:
+    AuthenticateddashboardJuniorDashboardRoute,
+  AuthenticateddashboardMiddleDashboardRoute:
+    AuthenticateddashboardMiddleDashboardRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -125,8 +145,9 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
+  '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
 }
 
 export interface FileRoutesByTo {
@@ -134,8 +155,9 @@ export interface FileRoutesByTo {
   '': typeof AuthenticatedRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
+  '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
 }
 
 export interface FileRoutesById {
@@ -144,23 +166,39 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/(dashboard)/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
+  '/_authenticated/(dashboard)/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/signin' | '/signup' | '/dashboard' | '/profile'
+  fullPaths:
+    | '/'
+    | ''
+    | '/signin'
+    | '/signup'
+    | '/profile'
+    | '/juniorDashboard'
+    | '/middleDashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/signin' | '/signup' | '/dashboard' | '/profile'
+  to:
+    | '/'
+    | ''
+    | '/signin'
+    | '/signup'
+    | '/profile'
+    | '/juniorDashboard'
+    | '/middleDashboard'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/signin'
     | '/signup'
-    | '/_authenticated/dashboard'
     | '/_authenticated/profile'
+    | '/_authenticated/(dashboard)/juniorDashboard'
+    | '/_authenticated/(dashboard)/middleDashboard'
   fileRoutesById: FileRoutesById
 }
 
@@ -200,8 +238,9 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
-        "/_authenticated/dashboard",
-        "/_authenticated/profile"
+        "/_authenticated/profile",
+        "/_authenticated/(dashboard)/juniorDashboard",
+        "/_authenticated/(dashboard)/middleDashboard"
       ]
     },
     "/signin": {
@@ -210,12 +249,16 @@ export const routeTree = rootRoute
     "/signup": {
       "filePath": "signup.tsx"
     },
-    "/_authenticated/dashboard": {
-      "filePath": "_authenticated/dashboard.tsx",
-      "parent": "/_authenticated"
-    },
     "/_authenticated/profile": {
       "filePath": "_authenticated/profile.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/(dashboard)/juniorDashboard": {
+      "filePath": "_authenticated/(dashboard)/juniorDashboard.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/(dashboard)/middleDashboard": {
+      "filePath": "_authenticated/(dashboard)/middleDashboard.tsx",
       "parent": "/_authenticated"
     }
   }
