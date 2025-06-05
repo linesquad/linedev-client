@@ -13,7 +13,6 @@ export const Route = createFileRoute("/signin")({
     const user = await getCurrentUser().catch(() => null);
     const role = await getUserRole().catch(() => null);
     if (user) {
-      console.log(role);
       throw redirect({ to: `/${role}Dashboard` });
     } 
     return {user, role};
