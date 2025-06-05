@@ -16,8 +16,10 @@ import { Route as SigninImport } from './routes/signin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
+import { Route as AuthenticateddashboardSeniorDashboardImport } from './routes/_authenticated/(dashboard)/seniorDashboard'
 import { Route as AuthenticateddashboardMiddleDashboardImport } from './routes/_authenticated/(dashboard)/middleDashboard'
 import { Route as AuthenticateddashboardJuniorDashboardImport } from './routes/_authenticated/(dashboard)/juniorDashboard'
+import { Route as AuthenticateddashboardClientDashboardImport } from './routes/_authenticated/(dashboard)/clientDashboard'
 
 // Create/Update Routes
 
@@ -50,6 +52,13 @@ const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
+const AuthenticateddashboardSeniorDashboardRoute =
+  AuthenticateddashboardSeniorDashboardImport.update({
+    id: '/(dashboard)/seniorDashboard',
+    path: '/seniorDashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticateddashboardMiddleDashboardRoute =
   AuthenticateddashboardMiddleDashboardImport.update({
     id: '/(dashboard)/middleDashboard',
@@ -61,6 +70,13 @@ const AuthenticateddashboardJuniorDashboardRoute =
   AuthenticateddashboardJuniorDashboardImport.update({
     id: '/(dashboard)/juniorDashboard',
     path: '/juniorDashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticateddashboardClientDashboardRoute =
+  AuthenticateddashboardClientDashboardImport.update({
+    id: '/(dashboard)/clientDashboard',
+    path: '/clientDashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -103,6 +119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/(dashboard)/clientDashboard': {
+      id: '/_authenticated/(dashboard)/clientDashboard'
+      path: '/clientDashboard'
+      fullPath: '/clientDashboard'
+      preLoaderRoute: typeof AuthenticateddashboardClientDashboardImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/(dashboard)/juniorDashboard': {
       id: '/_authenticated/(dashboard)/juniorDashboard'
       path: '/juniorDashboard'
@@ -117,6 +140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticateddashboardMiddleDashboardImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/(dashboard)/seniorDashboard': {
+      id: '/_authenticated/(dashboard)/seniorDashboard'
+      path: '/seniorDashboard'
+      fullPath: '/seniorDashboard'
+      preLoaderRoute: typeof AuthenticateddashboardSeniorDashboardImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
@@ -124,16 +154,22 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticateddashboardClientDashboardRoute: typeof AuthenticateddashboardClientDashboardRoute
   AuthenticateddashboardJuniorDashboardRoute: typeof AuthenticateddashboardJuniorDashboardRoute
   AuthenticateddashboardMiddleDashboardRoute: typeof AuthenticateddashboardMiddleDashboardRoute
+  AuthenticateddashboardSeniorDashboardRoute: typeof AuthenticateddashboardSeniorDashboardRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticateddashboardClientDashboardRoute:
+    AuthenticateddashboardClientDashboardRoute,
   AuthenticateddashboardJuniorDashboardRoute:
     AuthenticateddashboardJuniorDashboardRoute,
   AuthenticateddashboardMiddleDashboardRoute:
     AuthenticateddashboardMiddleDashboardRoute,
+  AuthenticateddashboardSeniorDashboardRoute:
+    AuthenticateddashboardSeniorDashboardRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -146,8 +182,10 @@ export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
+  '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
 }
 
 export interface FileRoutesByTo {
@@ -156,8 +194,10 @@ export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
+  '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
 }
 
 export interface FileRoutesById {
@@ -167,8 +207,10 @@ export interface FileRoutesById {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/(dashboard)/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/_authenticated/(dashboard)/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/_authenticated/(dashboard)/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
+  '/_authenticated/(dashboard)/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
 }
 
 export interface FileRouteTypes {
@@ -179,8 +221,10 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/profile'
+    | '/clientDashboard'
     | '/juniorDashboard'
     | '/middleDashboard'
+    | '/seniorDashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,8 +232,10 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/profile'
+    | '/clientDashboard'
     | '/juniorDashboard'
     | '/middleDashboard'
+    | '/seniorDashboard'
   id:
     | '__root__'
     | '/'
@@ -197,8 +243,10 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/_authenticated/profile'
+    | '/_authenticated/(dashboard)/clientDashboard'
     | '/_authenticated/(dashboard)/juniorDashboard'
     | '/_authenticated/(dashboard)/middleDashboard'
+    | '/_authenticated/(dashboard)/seniorDashboard'
   fileRoutesById: FileRoutesById
 }
 
@@ -239,8 +287,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated.tsx",
       "children": [
         "/_authenticated/profile",
+        "/_authenticated/(dashboard)/clientDashboard",
         "/_authenticated/(dashboard)/juniorDashboard",
-        "/_authenticated/(dashboard)/middleDashboard"
+        "/_authenticated/(dashboard)/middleDashboard",
+        "/_authenticated/(dashboard)/seniorDashboard"
       ]
     },
     "/signin": {
@@ -253,12 +303,20 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/profile.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/(dashboard)/clientDashboard": {
+      "filePath": "_authenticated/(dashboard)/clientDashboard.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/(dashboard)/juniorDashboard": {
       "filePath": "_authenticated/(dashboard)/juniorDashboard.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/(dashboard)/middleDashboard": {
       "filePath": "_authenticated/(dashboard)/middleDashboard.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/(dashboard)/seniorDashboard": {
+      "filePath": "_authenticated/(dashboard)/seniorDashboard.tsx",
       "parent": "/_authenticated"
     }
   }
