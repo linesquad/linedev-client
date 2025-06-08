@@ -13,11 +13,9 @@ export const createYourLogo = async (data: {
   return response.data;
 };
 
-export const updateYourLogo = async (id: string, data: {
-  name: string;
-  image: string;
-}) => {
-  const response = await instance.put(`/api/yourlogo/${id}`, data);
+export const updateYourLogo = async (id: string, name: string, image: string) => {
+  const response = await instance.put(`/api/yourlogo/${id}`, {id, name, image });
+  console.log(response.data);
   return response.data;
 };
 
