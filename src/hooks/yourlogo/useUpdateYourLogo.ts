@@ -6,14 +6,21 @@ import { toast } from "react-hot-toast";
 export const useUpdateYourLogo = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({id, name, image}: {id: string, name: string, image: string}) => updateYourLogo(id, name, image),
+    mutationFn: ({
+      id,
+      name,
+      image,
+    }: {
+      id: string;
+      name: string;
+      image: string;
+    }) => updateYourLogo(id, name, image),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["yourLogo"] });
+      queryClient.invalidateQueries({ queryKey: ["yourlogo"] });
       toast.success("Logo updated successfully");
     },
     onError: () => {
       toast.error("Failed to update logo");
     },
   });
-
 };

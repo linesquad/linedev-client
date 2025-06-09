@@ -19,6 +19,7 @@ export const Route = createFileRoute(
 function SeniorDashboard() { 
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -29,8 +30,8 @@ function SeniorDashboard() {
   return (
     <div className="flex flex-col justify-center items-center gap-8 min-h-screen p-8 bg-[#0E0C15] text-white">
       <CreateYourLogo handleCloseModal={handleCloseModal} showModal={showModal} />
-      <YourLogoData handleOpenModal={handleOpenModal} setShowUpdateModal={setShowUpdateModal} />
-      {showUpdateModal && <UpdateYourLogo setShowUpdateModal={setShowUpdateModal}  id={showUpdateModal} />}
+      <YourLogoData handleOpenModal={handleOpenModal} setShowUpdateModal={setShowUpdateModal} setSelectedId={setSelectedId} />
+      {showUpdateModal && selectedId && <UpdateYourLogo setShowUpdateModal={setShowUpdateModal} id={selectedId} />}
     </div>
   );
 }
