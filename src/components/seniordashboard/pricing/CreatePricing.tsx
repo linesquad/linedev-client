@@ -1,20 +1,11 @@
-import { useUpdatePricing } from "../../hooks/pricing/useUpdatePricing";
-import { usePricing } from "../../hooks/pricing/usePricing";
-import { useState, useEffect } from "react";
+import { useCreatePricing } from "../../../hooks/pricing/useCreatePricing";
+import { useState } from "react"; 
 import { FaPlus, FaTrash } from "react-icons/fa";
 
-function UpdatePricing({ id }: { id: string }) {
-  const { mutate: updatePricing, isPending } = useUpdatePricing();
-  const { data } = usePricing();
-  const pricingItem = data?.find((item: any) => item._id === id);
+function CreatePricing() {
+  const { mutate: createPricing, isPending } = useCreatePricing();
   const [features, setFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState("");
-
-  useEffect(() => {
-    if (pricingItem?.features) {
-      setFeatures(pricingItem.features);
-    }
-  }, [pricingItem]);
 
   const handleAddFeature = () => {
     if (featureInput.trim()) {
@@ -34,15 +25,13 @@ function UpdatePricing({ id }: { id: string }) {
     const priceString = formData.get("price") as string;
     const price = parseFloat(priceString);
     const description = formData.get("description") as string;
-    updatePricing({ _id: id, title, price, description, features });
+    createPricing({ title, price, description, features });
   };
-
-  if (!id) return null;
 
   return (
     <div>
       <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2">
-        Update Pricing Plan
+        Create New Pricing Plan
       </h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex flex-col">
@@ -58,7 +47,6 @@ function UpdatePricing({ id }: { id: string }) {
             placeholder="e.g. Basic, Premium, Enterprise"
             name="title"
             className="p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            defaultValue={pricingItem?.title}
             required
           />
         </div>
@@ -79,7 +67,6 @@ function UpdatePricing({ id }: { id: string }) {
               placeholder="99.99"
               name="price"
               className="pl-7 p-2.5 border border-gray-300 rounded-md shadow-sm w-full focus:ring-indigo-500 focus:border-indigo-500"
-              defaultValue={pricingItem?.price}
               min="0"
               step="0.01"
               required
@@ -99,7 +86,6 @@ function UpdatePricing({ id }: { id: string }) {
             placeholder="Brief description of this plan"
             name="description"
             className="p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            defaultValue={pricingItem?.description}
             required
           />
         </div>
@@ -126,7 +112,6 @@ function UpdatePricing({ id }: { id: string }) {
               <FaPlus />
             </button>
           </div>
-
           {features.length > 0 && (
             <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
               <p className="text-xs text-gray-500 mb-2">
@@ -157,11 +142,11 @@ function UpdatePricing({ id }: { id: string }) {
           disabled={isPending}
           className="w-full bg-indigo-600 text-white py-2.5 px-4 rounded-md hover:bg-indigo-700 disabled:bg-indigo-300 transition-colors duration-200 mt-4 font-medium"
         >
-          {isPending ? "Updating..." : "Update Plan"}
+          {isPending ? "Creating..." : "Create Plan"}
         </button>
       </form>
     </div>
   );
 }
 
-export default UpdatePricing;
+export default CreatePricing;

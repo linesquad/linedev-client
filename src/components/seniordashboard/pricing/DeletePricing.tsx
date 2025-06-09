@@ -1,5 +1,5 @@
 import { FaSpinner, FaTrash } from 'react-icons/fa';
-import { useDeletePricing } from '../../hooks/pricing/useDeletePricing';
+import { useDeletePricing } from '../../../hooks/pricing/useDeletePricing';
 
 function DeletePricing({ id }: { id: string }) {
   const { mutate: deletePricing, isPending } = useDeletePricing();

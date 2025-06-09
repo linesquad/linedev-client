@@ -1,6 +1,12 @@
 import { useYourLogo } from "../../../hooks/yourlogo/useYourLogo";
 import { useState } from "react";
-import { FaPencilAlt, FaPlus, FaRegFolder, FaSearch, FaTrash } from "react-icons/fa";
+import {
+  FaPencilAlt,
+  FaPlus,
+  FaRegFolder,
+  FaSearch,
+  FaTrash,
+} from "react-icons/fa";
 import MainSkeleton from "./skeletons/MainSkeleton";
 import DeleteYourLogo from "./DeleteYourLogo";
 
@@ -17,8 +23,7 @@ function YourLogoData({
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
-  if (isLoading)
-    return <MainSkeleton />;
+  if (isLoading) return <MainSkeleton />;
 
   if (isError)
     return (
@@ -34,7 +39,7 @@ function YourLogoData({
     ) || [];
 
   return (
-    <div className="w-full mt-24">
+    <div className="w-full">
       <div className="bg-[#0E0C15] rounded-lg shadow-xl overflow-hidden border border-gray-800">
         <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800">
           <div>
@@ -52,7 +57,7 @@ function YourLogoData({
                 className="w-full sm:w-64 px-4 py-2 pl-10 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <div className="absolute left-3 top-3 text-gray-400">
-                <FaSearch size={16} className="text-gray-400"/>
+                <FaSearch size={16} className="text-gray-400" />
               </div>
             </div>
 
@@ -60,7 +65,7 @@ function YourLogoData({
               onClick={handleOpenModal}
               className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center cursor-pointer"
             >
-              <FaPlus size={13} className="mr-1"/>
+              <FaPlus size={13} className="mr-1" />
               <span>Add Logo</span>
             </button>
           </div>
@@ -89,19 +94,27 @@ function YourLogoData({
                             {logo.name}
                           </h3>
                           <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => {
-                              setShowUpdateModal(true);
-                              setSelectedId(logo._id);
-                            }}
-                            className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
-                          >
-                            <FaPencilAlt size={16} className="text-white"/>
-                          </button>
-                          <button onClick={() => setIsOpenDeleteModal(true)} className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200 cursor-pointer">
-                            <FaTrash size={16} className="text-red-500" />
-                          </button>
-                          {isOpenDeleteModal && <DeleteYourLogo id={logo._id} setIsOpenDeleteModal={setIsOpenDeleteModal} />}
+                            <button
+                              onClick={() => {
+                                setShowUpdateModal(true);
+                                setSelectedId(logo._id);
+                              }}
+                              className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+                            >
+                              <FaPencilAlt size={16} className="text-white" />
+                            </button>
+                            <button
+                              onClick={() => setIsOpenDeleteModal(true)}
+                              className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+                            >
+                              <FaTrash size={16} className="text-red-500" />
+                            </button>
+                            {isOpenDeleteModal && (
+                              <DeleteYourLogo
+                                id={logo._id}
+                                setIsOpenDeleteModal={setIsOpenDeleteModal}
+                              />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -114,10 +127,7 @@ function YourLogoData({
         ) : (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <div className="bg-gray-800/50 p-4 rounded-full mb-4 cursor-pointer">
-              <FaRegFolder
-                size={48}
-                className="text-gray-500"
-              />
+              <FaRegFolder size={48} className="text-gray-500" />
             </div>
             <h3 className="text-xl font-semibold mb-2 text-gray-300">
               {searchTerm ? "No matching logos found" : "No logos found"}
@@ -139,7 +149,7 @@ function YourLogoData({
                 onClick={handleOpenModal}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center cursor-pointer"
               >
-                <FaPlus size={13} className="mr-1"/>
+                <FaPlus size={13} className="mr-1" />
                 Create Your First Logo
               </button>
             )}

@@ -1,9 +1,10 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import PricingData from "../../../components/pricing/PricingData";
+import PricingData from "../../../components/seniordashboard/pricing/PricingData";
 import YourLogoData from "../../../components/seniordashboard/yourlogo/YourLogoData";
 import CreateYourLogo from "../../../components/seniordashboard/yourlogo/CreateYourLogo";
 import { useState } from "react";
 import UpdateYourLogo from "../../../components/seniordashboard/yourlogo/UpdateYourLogo";
+import MainWrapper from "../../../components/MainWrapper";
 
 export const Route = createFileRoute(
   "/_authenticated/(dashboard)/seniorDashboard"
@@ -17,23 +18,46 @@ export const Route = createFileRoute(
   },
 });
 
-function SeniorDashboard() { 
+function SeniorDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
   const handleOpenModal = () => {
     setShowModal(true);
   };
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
-  
+
   return (
-    <div className="flex flex-col gap-8 p-8 bg-[#0E0C15] h-screen text-white">
-      <CreateYourLogo handleCloseModal={handleCloseModal} showModal={showModal} />
-      <YourLogoData handleOpenModal={handleOpenModal} setShowUpdateModal={setShowUpdateModal} setSelectedId={setSelectedId} />
-      {showUpdateModal && selectedId && <UpdateYourLogo setShowUpdateModal={setShowUpdateModal} id={selectedId} />}
-      <PricingData />
-    </div>
+    <MainWrapper>
+      <div className=" py-10 text-white">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-bold mb-8">Senior Dashboard</h1>
+
+          <div className="flex flex-col gap-10">
+            <CreateYourLogo
+              handleCloseModal={handleCloseModal}
+              showModal={showModal}
+            />
+            {showUpdateModal && selectedId && (
+              <UpdateYourLogo
+                setShowUpdateModal={setShowUpdateModal}
+                id={selectedId}
+              />
+            )}
+
+            <YourLogoData
+              handleOpenModal={handleOpenModal}
+              setShowUpdateModal={setShowUpdateModal}
+              setSelectedId={setSelectedId}
+            />
+            <PricingData />
+          </div>
+        </div>
+      </div>
+    </MainWrapper>
   );
 }
