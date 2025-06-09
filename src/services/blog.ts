@@ -52,3 +52,13 @@ export const getProfile = async () => {
 
   return response.data;
 };
+
+export const deleteBlog = async (postId: number) => {
+  const response = await instance.delete(`/api/profile/${postId}`);
+
+  if (!response) {
+    throw new Error("Failed to delete blog");
+  }
+
+  return response.data;
+};

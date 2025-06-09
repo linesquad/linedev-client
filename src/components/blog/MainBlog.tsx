@@ -49,7 +49,6 @@ export default function MainBlog() {
 
   const tags = watch("tags");
 
- 
   const [tagInput, setTagInput] = useState("");
 
   const onSubmit = (data: FormValues) => {
@@ -100,7 +99,7 @@ export default function MainBlog() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-4xl mx-auto p-6 bg-white border rounded-xl shadow-md mt-10"
+      className="max-w-4xl mx-auto p-6 bg-[#2b2146fa] text-[#fff] border rounded-xl shadow-md mt-10"
     >
       <div className="flex space-x-4 mb-6 border-b pb-2">
         {["content", "media", "categories"].map((tab) => (
