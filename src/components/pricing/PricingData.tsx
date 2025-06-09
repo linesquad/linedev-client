@@ -1,4 +1,5 @@
 import { usePricing } from "../../hooks/pricing/usePricing";
+import CreatePricing from "./CreatePricing";
 
 function PricingData() {
   const { data, isLoading, isError, error } = usePricing();
@@ -61,6 +62,7 @@ function PricingData() {
           </div>
         ))}
       </div>
+      <CreatePricing />
     </div>
   );
 }
