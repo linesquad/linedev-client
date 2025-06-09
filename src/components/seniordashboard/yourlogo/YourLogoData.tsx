@@ -1,7 +1,8 @@
 import { useYourLogo } from "../../../hooks/yourlogo/useYourLogo";
 import { useState } from "react";
-import { FaPencilAlt, FaPlus, FaRegFolder, FaSearch } from "react-icons/fa";
+import { FaPencilAlt, FaPlus, FaRegFolder, FaSearch, FaTrash } from "react-icons/fa";
 import MainSkeleton from "./skeletons/MainSkeleton";
+import DeleteYourLogo from "./DeleteYourLogo";
 
 function YourLogoData({
   handleOpenModal,
@@ -14,6 +15,7 @@ function YourLogoData({
 }) {
   const { data, isLoading, isError, error } = useYourLogo();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
   if (isLoading)
     return <MainSkeleton />;
@@ -32,7 +34,7 @@ function YourLogoData({
     ) || [];
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-24 sm:mt-0">
       <div className="bg-[#0E0C15] rounded-lg shadow-xl overflow-hidden border border-gray-800">
         <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800">
           <div>
@@ -82,10 +84,11 @@ function YourLogoData({
                         />
                       </div>
                       <div className="pt-4 border-t border-gray-700 mt-2">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <h3 className="font-medium text-white truncate">
                             {logo.name}
                           </h3>
+                          <div className="flex items-center gap-2">
                           <button
                             onClick={() => {
                               setShowUpdateModal(true);
@@ -95,6 +98,11 @@ function YourLogoData({
                           >
                             <FaPencilAlt size={16} className="text-white"/>
                           </button>
+                          <button onClick={() => setIsOpenDeleteModal(true)} className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200">
+                            <FaTrash size={16} className="text-red-500" />
+                          </button>
+                          {isOpenDeleteModal && <DeleteYourLogo id={logo._id} setIsOpenDeleteModal={setIsOpenDeleteModal} />}
+                          </div>
                         </div>
                       </div>
                     </div>
