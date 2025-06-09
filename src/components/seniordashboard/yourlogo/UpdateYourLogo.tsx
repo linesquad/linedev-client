@@ -10,24 +10,28 @@ function UpdateYourLogo({
   setShowUpdateModal: (show: boolean) => void;
   id: string;
 }) {
-  const [imageBase64, setImageBase64] = useState<string>("");
+
   const { mutate: updateYourLogo, isPending } = useUpdateYourLogo();
   const { data } = useYourLogo();
-
+  const [imageURL, setImageURL] = useState<string>("");
   const currentLogo = data?.data?.find(
     (logo: { _id: string }) => logo._id === id
   );
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setImageBase64(base64String);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if(!file) return
+    const data = new FormData()
+    data.append("file", file)
+    data.append("upload_preset", "linedev_client_cloudinary")
+    data.append("cloud_name", "dbhwfcf0d")
+    const res = await fetch(` https://api.cloudinary.com/v1_1/dbhwfcf0d/image/upload`, {
+      method: "POST",
+      body: data,
+    })
+
+    const uploadedImageURL = await res.json()
+    setImageURL(uploadedImageURL.url)
   };
 
   const handleUpdateYourLogo = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +39,7 @@ function UpdateYourLogo({
     const formData = new FormData(e.target as HTMLFormElement);
     const name = formData.get("name") as string;
 
-    const imageToUse = imageBase64 || currentLogo.image;
+    const imageToUse = imageURL || currentLogo.image;
     const nameToUse = name ? name : currentLogo.name;
 
     updateYourLogo({ id, name: nameToUse, image: imageToUse });
@@ -112,11 +116,11 @@ function UpdateYourLogo({
             </div>
 
             <div className="md:col-span-1 flex items-center justify-center">
-              {imageBase64 ? (
+              {imageURL ? (
                 <div className="text-center">
                   <div className="bg-gray-800 p-2 rounded-lg inline-block">
                     <img
-                      src={imageBase64}
+                      src={imageURL}
                       alt="New logo preview"
                       className="w-40 h-40 object-contain rounded-md"
                     />
