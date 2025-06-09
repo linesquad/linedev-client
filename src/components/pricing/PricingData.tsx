@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { usePricing } from "../../hooks/pricing/usePricing";
 import CreatePricing from "./CreatePricing";
-
+import UpdatePricing from "./UpdatePricing";  
 function PricingData() {
   const { data, isLoading, isError, error } = usePricing();
-
+  const [id, setId] = useState<string>("");
+  console.log(id);
   if (isLoading)
     return <div className="text-center py-20 text-gray-500">Loading...</div>;
 
@@ -58,11 +60,16 @@ function PricingData() {
                 <p>Created: {new Date(item.createdAt).toLocaleDateString()}</p>
                 <p>Updated: {new Date(item.updatedAt).toLocaleDateString()}</p>
               </div>
+
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={() => setId(item._id)}>
+                Update
+              </button>
             </div>
           </div>
         ))}
       </div>
       <CreatePricing />
+      <UpdatePricing id={id} />
     </div>
   );
 }
