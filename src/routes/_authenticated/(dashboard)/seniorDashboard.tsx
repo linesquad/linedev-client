@@ -28,7 +28,7 @@ function SeniorDashboard() {
   };
   
   return (
-    <div className="flex flex-col justify-center items-center gap-8 min-h-screen p-8 bg-[#0E0C15] text-white">
+    <div className="flex flex-col gap-8 p-8 bg-[#0E0C15] h-screen text-white">
       <CreateYourLogo handleCloseModal={handleCloseModal} showModal={showModal} />
       <YourLogoData handleOpenModal={handleOpenModal} setShowUpdateModal={setShowUpdateModal} setSelectedId={setSelectedId} />
       {showUpdateModal && selectedId && <UpdateYourLogo setShowUpdateModal={setShowUpdateModal} id={selectedId} />}

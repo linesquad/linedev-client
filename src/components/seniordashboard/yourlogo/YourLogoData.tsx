@@ -34,7 +34,7 @@ function YourLogoData({
     ) || [];
 
   return (
-    <div className="w-full mt-24 sm:mt-0">
+    <div className="w-full mt-24">
       <div className="bg-[#0E0C15] rounded-lg shadow-xl overflow-hidden border border-gray-800">
         <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800">
           <div>
