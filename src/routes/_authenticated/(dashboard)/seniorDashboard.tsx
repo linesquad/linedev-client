@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import MainBlog from "../../../components/blog/MainBlog";
 
 export const Route = createFileRoute(
   "/_authenticated/(dashboard)/seniorDashboard"
@@ -13,5 +14,9 @@ export const Route = createFileRoute(
 });
 
 function SeniorDashboard() {
-  return <div>Hello "/_authenticated/(dashboard)/seniorDashboard"!</div>;
+  return <Blog />;
+}
+
+function Blog() {
+  return <MainBlog />;
 }

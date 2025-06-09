@@ -15,6 +15,7 @@ import { Route as SignupImport } from './routes/signup'
 import { Route as SigninImport } from './routes/signin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
+import { Route as BlogIndexImport } from './routes/blog/index'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 import { Route as AuthenticateddashboardSeniorDashboardImport } from './routes/_authenticated/(dashboard)/seniorDashboard'
 import { Route as AuthenticateddashboardMiddleDashboardImport } from './routes/_authenticated/(dashboard)/middleDashboard'
@@ -43,6 +44,12 @@ const AuthenticatedRoute = AuthenticatedImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BlogIndexRoute = BlogIndexImport.update({
+  id: '/blog/',
+  path: '/blog/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -119,6 +126,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_authenticated/(dashboard)/clientDashboard': {
       id: '/_authenticated/(dashboard)/clientDashboard'
       path: '/clientDashboard'
@@ -182,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/blog': typeof BlogIndexRoute
   '/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
@@ -194,6 +209,7 @@ export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/blog': typeof BlogIndexRoute
   '/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
@@ -207,6 +223,7 @@ export interface FileRoutesById {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/blog/': typeof BlogIndexRoute
   '/_authenticated/(dashboard)/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/_authenticated/(dashboard)/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/_authenticated/(dashboard)/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
@@ -221,6 +238,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/profile'
+    | '/blog'
     | '/clientDashboard'
     | '/juniorDashboard'
     | '/middleDashboard'
@@ -232,6 +250,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/profile'
+    | '/blog'
     | '/clientDashboard'
     | '/juniorDashboard'
     | '/middleDashboard'
@@ -243,6 +262,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/_authenticated/profile'
+    | '/blog/'
     | '/_authenticated/(dashboard)/clientDashboard'
     | '/_authenticated/(dashboard)/juniorDashboard'
     | '/_authenticated/(dashboard)/middleDashboard'
@@ -255,6 +275,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -262,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -277,7 +299,8 @@ export const routeTree = rootRoute
         "/",
         "/_authenticated",
         "/signin",
-        "/signup"
+        "/signup",
+        "/blog/"
       ]
     },
     "/": {
@@ -302,6 +325,9 @@ export const routeTree = rootRoute
     "/_authenticated/profile": {
       "filePath": "_authenticated/profile.tsx",
       "parent": "/_authenticated"
+    },
+    "/blog/": {
+      "filePath": "blog/index.tsx"
     },
     "/_authenticated/(dashboard)/clientDashboard": {
       "filePath": "_authenticated/(dashboard)/clientDashboard.tsx",
