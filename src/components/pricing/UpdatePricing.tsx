@@ -1,12 +1,12 @@
 import { useUpdatePricing } from "../../hooks/pricing/useUpdatePricing";
 import { usePricing } from "../../hooks/pricing/usePricing";
 import { useState, useEffect } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 
 function UpdatePricing({ id }: { id: string }) {
   const { mutate: updatePricing, isPending } = useUpdatePricing();
   const { data } = usePricing();
-  const pricingItem = data.find((item: any) => item._id === id);
+  const pricingItem = data?.find((item: any) => item._id === id);
   const [features, setFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState("");
 
@@ -40,97 +40,124 @@ function UpdatePricing({ id }: { id: string }) {
   if (!id) return null;
 
   return (
-    <div className="container mx-auto px-4 py-10 mt-20">
-      <h1 className="text-2xl font-bold mb-6">Update Pricing</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div>
+      <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2">
+        Update Pricing Plan
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex flex-col">
-          <label htmlFor="title" className="mb-1">
+          <label
+            htmlFor="title"
+            className="mb-1 text-sm font-medium text-gray-700"
+          >
             Title
           </label>
           <input
             type="text"
             id="title"
-            placeholder="Title"
+            placeholder="e.g. Basic, Premium, Enterprise"
             name="title"
-            className="p-2 border rounded"
+            className="p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             defaultValue={pricingItem?.title}
             required
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="price" className="mb-1">
+          <label
+            htmlFor="price"
+            className="mb-1 text-sm font-medium text-gray-700"
+          >
             Price
           </label>
-          <input
-            type="number"
-            id="price"
-            placeholder="Price"
-            name="price"
-            className="p-2 border rounded"
-            defaultValue={pricingItem?.price}
-            required
-          />
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span className="text-gray-500">$</span>
+            </div>
+            <input
+              type="number"
+              id="price"
+              placeholder="99.99"
+              name="price"
+              className="pl-7 p-2.5 border border-gray-300 rounded-md shadow-sm w-full focus:ring-indigo-500 focus:border-indigo-500"
+              defaultValue={pricingItem?.price}
+              min="0"
+              step="0.01"
+              required
+            />
+          </div>
         </div>
         <div className="flex flex-col">
-          <label htmlFor="description" className="mb-1">
+          <label
+            htmlFor="description"
+            className="mb-1 text-sm font-medium text-gray-700"
+          >
             Description
           </label>
           <input
             type="text"
             id="description"
-            placeholder="Description"
+            placeholder="Brief description of this plan"
             name="description"
-            className="p-2 border rounded"
+            className="p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             defaultValue={pricingItem?.description}
             required
           />
         </div>
         <div className="flex flex-col">
-          <label className="mb-1">Features</label>
-          <div className="flex space-x-2 mb-2">
+          <label className="mb-1 text-sm font-medium text-gray-700">
+            Features
+          </label>
+          <div className="flex space-x-2 mb-3">
             <input
               type="text"
               value={featureInput}
               onChange={(e) => setFeatureInput(e.target.value)}
               placeholder="Add a feature"
-              className="p-2 border rounded flex-1"
+              className="p-2.5 border border-gray-300 rounded-md shadow-sm flex-1 focus:ring-indigo-500 focus:border-indigo-500"
+              onKeyPress={(e) =>
+                e.key === "Enter" && (e.preventDefault(), handleAddFeature())
+              }
             />
             <button
               type="button"
               onClick={handleAddFeature}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-150"
             >
-              Add
+              <FaPlus />
             </button>
           </div>
-          
+
           {features.length > 0 && (
-            <div className="flex flex-row gap-2 flex-wrap mb-2">
+            <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
+              <p className="text-xs text-gray-500 mb-2">
+                Features included in this plan:
+              </p>
+              <div className="flex flex-wrap gap-2">
                 {features.map((feature, index) => (
-                  <li
+                  <div
                     key={index}
-                    className="flex justify-between items-center py-1 w-fit border p-2 rounded gap-2"
+                    className="flex items-center bg-white border border-gray-200 rounded-full pl-3 pr-2 py-1 text-sm group hover:border-gray-300 transition-colors duration-150"
                   >
-                    <span>{feature}</span>
+                    <span className="mr-1">{feature}</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveFeature(index)}
-                      className="text-red-500"
+                      className="text-gray-400 hover:text-red-500 transition-colors duration-150 p-1 rounded-full"
                     >
-                      <FaTrash />
+                      <FaTrash size={12} />
                     </button>
-                  </li>
+                  </div>
                 ))}
-
+              </div>
             </div>
           )}
         </div>
         <button
           type="submit"
           disabled={isPending}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
+          className="w-full bg-indigo-600 text-white py-2.5 px-4 rounded-md hover:bg-indigo-700 disabled:bg-indigo-300 transition-colors duration-200 mt-4 font-medium"
         >
-          {isPending ? "Updating..." : "Update"}
+          {isPending ? "Updating..." : "Update Plan"}
         </button>
       </form>
     </div>

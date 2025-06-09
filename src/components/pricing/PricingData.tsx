@@ -2,10 +2,11 @@ import { useState } from "react";
 import { usePricing } from "../../hooks/pricing/usePricing";
 import CreatePricing from "./CreatePricing";
 import UpdatePricing from "./UpdatePricing";  
+import DeletePricing from "./DeletePricing";
 function PricingData() {
   const { data, isLoading, isError, error } = usePricing();
   const [id, setId] = useState<string>("");
-  console.log(id);
+
   if (isLoading)
     return <div className="text-center py-20 text-gray-500">Loading...</div>;
 
@@ -24,11 +25,16 @@ function PricingData() {
             key={item._id}
             className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
           >
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
+            <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white flex justify-between items-center">
+              <div>
               <h3 className="text-2xl font-bold">${item.price}</h3>
               <p className="text-gray-100 mt-2 font-medium">
                 {item.description}
               </p>
+              </div>
+              <div>
+                <DeletePricing id={item._id} />
+              </div>
             </div>
 
             <div className="p-6">
