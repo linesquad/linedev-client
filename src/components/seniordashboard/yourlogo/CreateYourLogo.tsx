@@ -43,7 +43,7 @@ function CreateYourLogo({
             <h2 className="text-xl font-semibold">Create New Logo</h2>
             <button
               onClick={handleCloseModal}
-              className="text-gray-400 hover:text-white transition-colors duration-200"
+              className="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +95,7 @@ function CreateYourLogo({
                       name="image"
                       accept="image/*"
                       onChange={handleFileChange}
-                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all duration-200"
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all duration-200 cursor-pointer"
                       required
                     />
                   </div>
@@ -153,13 +153,13 @@ function CreateYourLogo({
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="px-5 py-2.5 mr-3 bg-transparent hover:bg-gray-700 text-white font-medium rounded-md border border-gray-600 transition-all duration-200"
+                className="px-5 py-2.5 mr-3 bg-transparent hover:bg-gray-700 text-white font-medium rounded-md border border-gray-600 transition-all duration-200 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-lg hover:shadow-blue-500/20 transition-all duration-200 flex items-center"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-lg hover:shadow-blue-500/20 transition-all duration-200 flex items-center cursor-pointer"
               >
                 <span>Create Logo</span>
               </button>

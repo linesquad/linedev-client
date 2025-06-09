@@ -36,7 +36,7 @@ function DeleteYourLogo({ id, setIsOpenDeleteModal }: { id: string, setIsOpenDel
           <div className="flex justify-end">
             <button
               onClick={() => setIsOpenDeleteModal(false)}
-              className="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200"
+              className="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200 cursor-pointer"
             >
               Close
             </button>
@@ -57,7 +57,7 @@ function DeleteYourLogo({ id, setIsOpenDeleteModal }: { id: string, setIsOpenDel
             </h2>
             <button
               onClick={() => setIsOpenDeleteModal(false)}
-              className="text-gray-400 hover:text-white transition-colors duration-200 p-1 rounded-full hover:bg-gray-700"
+              className="text-gray-400 hover:text-white transition-colors duration-200 p-1 rounded-full hover:bg-gray-700 cursor-pointer"
               aria-label="Close"
             >
               <FaTimes size={18} />
@@ -77,7 +77,7 @@ function DeleteYourLogo({ id, setIsOpenDeleteModal }: { id: string, setIsOpenDel
               <button
                 onClick={handleDelete}
                 disabled={isConfirming}
-                className={`px-5 py-2.5 rounded-md font-medium transition-all duration-200 flex items-center justify-center ${
+                className={`px-5 py-2.5 rounded-md font-medium transition-all duration-200 flex items-center justify-center cursor-pointer ${
                   isConfirming
                     ? "bg-red-800 cursor-not-allowed"
                     : "bg-red-600 hover:bg-red-700"
@@ -95,7 +95,7 @@ function DeleteYourLogo({ id, setIsOpenDeleteModal }: { id: string, setIsOpenDel
               <button
                 onClick={() => setIsOpenDeleteModal(false)}
                 disabled={isConfirming}
-                className="px-5 py-2.5 rounded-md font-medium border border-gray-600 hover:bg-gray-700 transition-all duration-200"
+                className="px-5 py-2.5 rounded-md font-medium border border-gray-600 hover:bg-gray-700 transition-all duration-200 cursor-pointer"
               >
                 Cancel
               </button>

@@ -1,6 +1,7 @@
 import { useUpdateYourLogo } from "../../../hooks/yourlogo/useUpdateYourLogo";
 import { useState } from "react";
 import { useYourLogo } from "../../../hooks/yourlogo/useYourLogo";
+import Modal from "../../modal/Modal";
 
 function UpdateYourLogo({
   setShowUpdateModal,
@@ -45,13 +46,14 @@ function UpdateYourLogo({
   if (isPending) return <div>Updating...</div>;
 
   return (
+    <Modal>    
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-[#0E0C15] text-white rounded-lg w-full max-w-xl shadow-2xl">
         <div className="flex justify-between items-center p-6 border-b border-gray-700">
           <h2 className="text-xl font-semibold">Update Logo</h2>
           <button
             onClick={() => setShowUpdateModal(false)}
-            className="text-gray-400 hover:text-white transition-colors duration-200"
+            className="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +105,7 @@ function UpdateYourLogo({
                     name="image"
                     accept="image/*"
                     onChange={handleFileChange}
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all duration-200 cursor-pointer"
                   />
                 </div>
               </div>
@@ -142,14 +144,14 @@ function UpdateYourLogo({
             <button
               type="button"
               onClick={() => setShowUpdateModal(false)}
-              className="px-5 py-2.5 mr-3 bg-transparent hover:bg-gray-700 text-white font-medium rounded-md border border-gray-600 transition-all duration-200"
+              className="px-5 py-2.5 mr-3 bg-transparent hover:bg-gray-700 text-white font-medium rounded-md border border-gray-600 transition-all duration-200 cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-lg hover:shadow-blue-500/20 transition-all duration-200 flex items-center disabled:opacity-50 disabled:pointer-events-none"
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-lg hover:shadow-blue-500/20 transition-all duration-200 flex items-center disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
             >
               {isPending ? "Updating..." : "Update Logo"}
             </button>
@@ -157,6 +159,7 @@ function UpdateYourLogo({
         </form>
       </div>
     </div>
+    </Modal>
   );
 }
 

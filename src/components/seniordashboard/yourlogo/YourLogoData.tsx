@@ -58,7 +58,7 @@ function YourLogoData({
 
             <button
               onClick={handleOpenModal}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center cursor-pointer"
             >
               <FaPlus size={13} className="mr-1"/>
               <span>Add Logo</span>
@@ -94,11 +94,11 @@ function YourLogoData({
                               setShowUpdateModal(true);
                               setSelectedId(logo._id);
                             }}
-                            className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200"
+                            className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
                           >
                             <FaPencilAlt size={16} className="text-white"/>
                           </button>
-                          <button onClick={() => setIsOpenDeleteModal(true)} className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200">
+                          <button onClick={() => setIsOpenDeleteModal(true)} className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors duration-200 cursor-pointer">
                             <FaTrash size={16} className="text-red-500" />
                           </button>
                           {isOpenDeleteModal && <DeleteYourLogo id={logo._id} setIsOpenDeleteModal={setIsOpenDeleteModal} />}
@@ -113,7 +113,7 @@ function YourLogoData({
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 px-4">
-            <div className="bg-gray-800/50 p-4 rounded-full mb-4">
+            <div className="bg-gray-800/50 p-4 rounded-full mb-4 cursor-pointer">
               <FaRegFolder
                 size={48}
                 className="text-gray-500"
@@ -130,14 +130,14 @@ function YourLogoData({
             {searchTerm ? (
               <button
                 onClick={() => setSearchTerm("")}
-                className="text-blue-500 hover:text-blue-400 transition-colors duration-200"
+                className="text-blue-500 hover:text-blue-400 transition-colors duration-200 cursor-pointer"
               >
                 Clear search
               </button>
             ) : (
               <button
                 onClick={handleOpenModal}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center cursor-pointer"
               >
                 <FaPlus size={13} className="mr-1"/>
                 Create Your First Logo
