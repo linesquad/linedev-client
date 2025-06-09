@@ -1,106 +1,97 @@
-import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { useCreateBlog } from "../../hooks/useCreateBlog";
 import { useGetBloggerPosts } from "../../hooks/useGetBlog";
 import { toast } from "react-hot-toast";
 import { useGetProfile } from "../../hooks/useGetProfile";
+import { useState } from "react";
+
+type FormValues = {
+  title: string;
+  content: string;
+  image: string;
+  category: string;
+  tags: string[];
+  isFeatured: boolean;
+};
 
 export default function MainBlog() {
   const [activeTab, setActiveTab] = useState<
     "content" | "media" | "categories"
   >("content");
 
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    author: "",
-    image: "",
-    category: "",
-    tags: [] as string[],
-    isFeatured: false,
-  });
-
-  const [tagInput, setTagInput] = useState("");
-
-  const { mutate } = useCreateBlog();
-  const { data, isLoading, isError } = useGetBloggerPosts();
-  console.log(data);
   const {
     data: profile,
     isLoading: proFileLoading,
     isError: profileError,
   } = useGetProfile();
-  console.log(profile?.user?.id);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const { mutate } = useCreateBlog();
+  const { data, isLoading, isError } = useGetBloggerPosts();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: "",
+      content: "",
+      image: "",
+      category: "",
+      tags: [],
+      isFeatured: false,
+    },
+  });
+
+  const tags = watch("tags");
+
+ 
+  const [tagInput, setTagInput] = useState("");
+
+  const onSubmit = (data: FormValues) => {
+    if (!profile?.user?.id) {
+      toast.error("User profile not loaded");
+      return;
+    }
+
+    if (!data.title || !data.content || !data.image || !data.category) {
+      toast.error("Fill all the fields!");
+      return;
+    }
+
+    mutate({
+      title: data.title,
+      content: data.content,
+      tags: data.tags,
+      image: data.image,
+      category: data.category,
+      isFeatured: data.isFeatured,
+      author: profile.user.id,
+    });
+
+    reset();
+    setTagInput("");
   };
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       e.preventDefault();
-      if (!formData.tags.includes(tagInput.trim())) {
-        setFormData((prev) => ({
-          ...prev,
-          tags: [...prev.tags, tagInput.trim()],
-        }));
+      if (!tags.includes(tagInput.trim())) {
+        setValue("tags", [...tags, tagInput.trim()]);
       }
       setTagInput("");
     }
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      tags: prev.tags.filter((tag) => tag !== tagToRemove),
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const { title, content, image, category, tags, isFeatured } = formData;
-    const authorId = profile?.user?.id;
-
-    console.log("Submitting with values:");
-    console.log("title:", title);
-    console.log("content:", content);
-    console.log("image:", image);
-    console.log("category:", category);
-    console.log("authorId:", authorId);
-
-    if (!title || !content || !image || !category || !authorId) {
-      toast.error("Fill all the fields!");
-      return;
-    }
-
-    mutate({
-      title,
-      content,
-      tags,
-      image,
-      category,
-      isFeatured,
-      author: authorId,
-    });
-
-    e.currentTarget.reset();
-    setFormData({
-      title: "",
-      content: "",
-      author: "",
-      image: "",
-      category: "",
-      tags: [],
-      isFeatured: false,
-    });
-    setTagInput("");
+    setValue(
+      "tags",
+      tags.filter((tag) => tag !== tagToRemove)
+    );
   };
 
   if (isLoading || proFileLoading) return <p>loading</p>;
@@ -108,7 +99,7 @@ export default function MainBlog() {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="max-w-4xl mx-auto p-6 bg-white border rounded-xl shadow-md mt-10"
     >
       <div className="flex space-x-4 mb-6 border-b pb-2">
@@ -133,26 +124,26 @@ export default function MainBlog() {
           <div>
             <label className="block font-medium mb-1">Title</label>
             <input
-              name="title"
+              {...register("title", { required: "Title is required" })}
               type="text"
-              required
               className="w-full border px-3 py-2 rounded"
               placeholder="Enter blog title"
-              value={formData.title}
-              onChange={handleChange}
             />
+            {errors.title && (
+              <p className="text-red-500 text-sm">{errors.title.message}</p>
+            )}
           </div>
           <div>
             <label className="block font-medium mb-1">Content</label>
             <textarea
-              name="content"
+              {...register("content", { required: "Content is required" })}
               rows={6}
-              required
               className="w-full border px-3 py-2 rounded"
               placeholder="Write your blog content..."
-              value={formData.content}
-              onChange={handleChange}
             />
+            {errors.content && (
+              <p className="text-red-500 text-sm">{errors.content.message}</p>
+            )}
           </div>
         </div>
       )}
@@ -162,13 +153,14 @@ export default function MainBlog() {
           <div>
             <label className="block font-medium mb-1">Image URL</label>
             <input
-              name="image"
+              {...register("image", { required: "Image URL is required" })}
               type="text"
               className="w-full border px-3 py-2 rounded"
               placeholder="https://example.com/image.jpg"
-              value={formData.image}
-              onChange={handleChange}
             />
+            {errors.image && (
+              <p className="text-red-500 text-sm">{errors.image.message}</p>
+            )}
           </div>
         </div>
       )}
@@ -178,19 +170,19 @@ export default function MainBlog() {
           <div>
             <label className="block font-medium mb-1">Category</label>
             <input
-              name="category"
+              {...register("category", { required: "Category is required" })}
               type="text"
               className="w-full border px-3 py-2 rounded"
               placeholder="Enter category"
-              value={formData.category}
-              onChange={handleChange}
             />
+            {errors.category && (
+              <p className="text-red-500 text-sm">{errors.category.message}</p>
+            )}
           </div>
 
           <div>
             <label className="block font-medium mb-1">Tags</label>
             <input
-              name="tag"
               type="text"
               className="w-full border px-3 py-2 rounded"
               placeholder="Type tag and press Enter"
@@ -199,7 +191,7 @@ export default function MainBlog() {
               onKeyDown={handleAddTag}
             />
             <div className="flex flex-wrap mt-2 gap-2">
-              {formData.tags.map((tag, idx) => (
+              {tags.map((tag, idx) => (
                 <span
                   key={idx}
                   className="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-sm flex items-center"
@@ -218,17 +210,24 @@ export default function MainBlog() {
           </div>
 
           <div className="flex items-center space-x-2">
-            <input
+            <Controller
+              control={control}
               name="isFeatured"
-              type="checkbox"
-              id="featured"
-              className="w-4 h-4"
-              checked={formData.isFeatured}
-              onChange={handleChange}
+              render={({ field }) => (
+                <>
+                  <input
+                    type="checkbox"
+                    id="featured"
+                    className="w-4 h-4"
+                    checked={field.value}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                  />
+                  <label htmlFor="featured" className="text-sm">
+                    Featured Post?
+                  </label>
+                </>
+              )}
             />
-            <label htmlFor="featured" className="text-sm">
-              Featured Post?
-            </label>
           </div>
         </div>
       )}
@@ -237,6 +236,10 @@ export default function MainBlog() {
         <button
           type="button"
           className="bg-gray-200 hover:bg-gray-300 text-sm px-4 py-2 rounded"
+          onClick={() => {
+            reset();
+            setTagInput("");
+          }}
         >
           Save Draft
         </button>
