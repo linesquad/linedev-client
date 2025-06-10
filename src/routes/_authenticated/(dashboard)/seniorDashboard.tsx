@@ -32,10 +32,10 @@ function SeniorDashboard() {
   };
 
   return (
+    <div className="bg-[#0E0C15] pt-20">
     <MainWrapper>
-      <div className=" py-10 text-white">
+      <div className=" py-10 text-white ">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8">Senior Dashboard</h1>
 
           <div className="flex flex-col gap-10">
             <CreateYourLogo
@@ -59,5 +59,6 @@ function SeniorDashboard() {
         </div>
       </div>
     </MainWrapper>
+    </div>
   );
 }

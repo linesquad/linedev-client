@@ -40,7 +40,7 @@ function Header({ user, onLogout }: HeaderProps) {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full z-50 border-b  text-gray-400 transition-all duration-300 ${scrolled ? "py-3" : "py-5"}`}
+      className={`fixed top-0 left-0 w-full z-50 border-b bg-[#0E0C15]/60 backdrop-blur-sm  text-gray-400 transition-all duration-300 ${scrolled ? "py-3" : "py-5"}`}
     >
       <div className="flex items-center justify-between px-4 sm:px-5 lg:px-7.5 xl:px-10 max-lg:py-2">
         <div className="flex items-center gap-2 flex-1">

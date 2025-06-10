@@ -1,8 +1,12 @@
 import { useCreatePricing } from "../../../hooks/pricing/useCreatePricing";
-import { useState } from "react"; 
+import { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
-function CreatePricing() {
+interface CreatePricingProps {
+  setShowCreateForm: (show: boolean) => void;
+}
+
+function CreatePricing({ setShowCreateForm }: CreatePricingProps) {
   const { mutate: createPricing, isPending } = useCreatePricing();
   const [features, setFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState("");
@@ -25,19 +29,22 @@ function CreatePricing() {
     const priceString = formData.get("price") as string;
     const price = parseFloat(priceString);
     const description = formData.get("description") as string;
-    createPricing({ title, price, description, features });
+    createPricing(
+      { title, price, description, features },
+    );
+    setShowCreateForm(false);
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2">
+    <div className="bg-gray-900/30 rounded-lg p-6 border border-gray-800">
+      <h2 className="text-xl font-bold mb-6 text-white border-b border-gray-800 pb-2">
         Create New Pricing Plan
       </h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex flex-col">
           <label
             htmlFor="title"
-            className="mb-1 text-sm font-medium text-gray-700"
+            className="mb-1 text-sm font-medium text-gray-300"
           >
             Title
           </label>
@@ -46,14 +53,14 @@ function CreatePricing() {
             id="title"
             placeholder="e.g. Basic, Premium, Enterprise"
             name="title"
-            className="p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            className="p-2.5 bg-gray-800 border border-gray-700 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             required
           />
         </div>
         <div className="flex flex-col">
           <label
             htmlFor="price"
-            className="mb-1 text-sm font-medium text-gray-700"
+            className="mb-1 text-sm font-medium text-gray-300"
           >
             Price
           </label>
@@ -66,7 +73,7 @@ function CreatePricing() {
               id="price"
               placeholder="99.99"
               name="price"
-              className="pl-7 p-2.5 border border-gray-300 rounded-md shadow-sm w-full focus:ring-indigo-500 focus:border-indigo-500"
+              className="pl-7 p-2.5 bg-gray-800 border border-gray-700 text-white rounded-md shadow-sm w-full focus:ring-blue-500 focus:border-blue-500"
               min="0"
               step="0.01"
               required
@@ -76,7 +83,7 @@ function CreatePricing() {
         <div className="flex flex-col">
           <label
             htmlFor="description"
-            className="mb-1 text-sm font-medium text-gray-700"
+            className="mb-1 text-sm font-medium text-gray-300"
           >
             Description
           </label>
@@ -85,12 +92,12 @@ function CreatePricing() {
             id="description"
             placeholder="Brief description of this plan"
             name="description"
-            className="p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            className="p-2.5 bg-gray-800 border border-gray-700 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             required
           />
         </div>
         <div className="flex flex-col">
-          <label className="mb-1 text-sm font-medium text-gray-700">
+          <label className="mb-1 text-sm font-medium text-gray-300">
             Features
           </label>
           <div className="flex space-x-2 mb-3">
@@ -99,7 +106,7 @@ function CreatePricing() {
               value={featureInput}
               onChange={(e) => setFeatureInput(e.target.value)}
               placeholder="Add a feature"
-              className="p-2.5 border border-gray-300 rounded-md shadow-sm flex-1 focus:ring-indigo-500 focus:border-indigo-500"
+              className="p-2.5 bg-gray-800 border border-gray-700 text-white rounded-md shadow-sm flex-1 focus:ring-blue-500 focus:border-blue-500"
               onKeyPress={(e) =>
                 e.key === "Enter" && (e.preventDefault(), handleAddFeature())
               }
@@ -107,23 +114,23 @@ function CreatePricing() {
             <button
               type="button"
               onClick={handleAddFeature}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-150"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-150"
             >
               <FaPlus />
             </button>
           </div>
           {features.length > 0 && (
-            <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
-              <p className="text-xs text-gray-500 mb-2">
+            <div className="bg-gray-800/50 rounded-md p-3 border border-gray-700">
+              <p className="text-xs text-gray-400 mb-2">
                 Features included in this plan:
               </p>
               <div className="flex flex-wrap gap-2">
                 {features.map((feature, index) => (
                   <div
                     key={index}
-                    className="flex items-center bg-white border border-gray-200 rounded-full pl-3 pr-2 py-1 text-sm group hover:border-gray-300 transition-colors duration-150"
+                    className="flex items-center bg-gray-800 border border-gray-700 rounded-full pl-3 pr-2 py-1 text-sm group hover:border-gray-600 transition-colors duration-150"
                   >
-                    <span className="mr-1">{feature}</span>
+                    <span className="mr-1 text-gray-300">{feature}</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveFeature(index)}
@@ -140,7 +147,7 @@ function CreatePricing() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full bg-indigo-600 text-white py-2.5 px-4 rounded-md hover:bg-indigo-700 disabled:bg-indigo-300 transition-colors duration-200 mt-4 font-medium"
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2.5 px-4 rounded-md hover:from-blue-600 hover:to-purple-700 disabled:from-blue-400 disabled:to-purple-400 transition-colors duration-200 mt-4 font-medium cursor-pointer"
         >
           {isPending ? "Creating..." : "Create Plan"}
         </button>
