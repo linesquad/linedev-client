@@ -53,11 +53,47 @@ export const getProfile = async () => {
   return response.data;
 };
 
-export const deleteBlog = async (postId: number) => {
-  const response = await instance.delete(`/api/profile/${postId}`);
+export const deleteBlog = async (blogId: number) => {
+  const response = await instance.delete(`/api/blogs/${blogId}`);
 
   if (!response) {
     throw new Error("Failed to delete blog");
+  }
+
+  return response.data;
+};
+
+export const updateBlog = async ({
+  blogId,
+  title,
+  content,
+  author,
+  tags,
+  image,
+  category,
+  isFeatured,
+}: {
+  blogId: number;
+  title: string;
+  content: string;
+  author: string;
+  tags: string[];
+  image: string;
+  category: string;
+  isFeatured: boolean;
+}) => {
+  const response = await instance.put(`/api/blogs/${blogId}`, {
+    title,
+    author,
+    content,
+    tags,
+    image,
+    category,
+    isFeatured,
+  });
+
+  if (!response) {
+    throw new Error("Failed to update blog");
   }
 
   return response.data;

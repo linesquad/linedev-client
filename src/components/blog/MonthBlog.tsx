@@ -103,12 +103,8 @@ export default function MonthBlog() {
 
   return (
     <div className=" gap-[10px] ">
-      <div className="max-w-4xl h-[400px] mx-auto mt-10 px-4 bg-[#2b2146fa] rounded-xl shadow-lg p-6">
+      <div className="max-w-4xl h-[400px] mx-auto mt-10 px-4  bg-[#2b2146fa] rounded-xl shadow-lg p-6">
         <Bar data={chartData} options={chartOptions} />
-      </div>
-      <div className="h-[150px]  text-[#fff] flex flex-col justify-center items-center bg-[#32294bfa] w-[150px]">
-        <h1>All Blogs</h1>
-        <p>{data.blogs.length}</p>
       </div>
     </div>
   );

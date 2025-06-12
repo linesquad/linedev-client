@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateBlog } from "../services/blog";
 import { toast } from "react-hot-toast";
-import { createBlog } from "../services/blog";
-
-export const useCreateBlog = () => {
+export const useUpdateBlog = () => {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
+  return useMutation({
     mutationFn: ({
       title,
       content,
@@ -14,7 +13,9 @@ export const useCreateBlog = () => {
       image,
       category,
       isFeatured,
+      blogId,
     }: {
+      
       title: string;
       content: string;
       author: string;
@@ -22,8 +23,9 @@ export const useCreateBlog = () => {
       image: string;
       category: string;
       isFeatured: boolean;
+      blogId: number;
     }) =>
-      createBlog({
+      updateBlog({
         title,
         content,
         author,
@@ -31,15 +33,15 @@ export const useCreateBlog = () => {
         image,
         category,
         isFeatured,
+        blogId,
       }),
+
     onSuccess: () => {
-      toast.success("Blog created successfully!");
       queryClient.invalidateQueries({ queryKey: ["Blogs"] });
     },
+
     onError: (error: any) => {
-      toast.error("Failed to create blog: " + error.message);
+      toast.error(error.message || "Error updating blog");
     },
   });
-
-  return mutation;
 };
