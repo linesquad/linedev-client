@@ -98,3 +98,21 @@ export const updateBlog = async ({
 
   return response.data;
 };
+
+export const getBlogsPaginated = async (
+  page: number = 1,
+  limit: number = 10
+) => {
+  const response = await instance.get("/api/blogs", {
+    params: {
+      page,
+      limit,
+    },
+  });
+
+  if (!response || !response.data) {
+    throw new Error("Failed to fetch paginated blogs");
+  }
+
+  return response.data;
+};
