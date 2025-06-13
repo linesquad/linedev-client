@@ -6,6 +6,7 @@ import { useGetProfile } from "../../hooks/useGetProfile";
 import { useState } from "react";
 import "react-quill-new/dist/quill.snow.css";
 import ReactQuill from "react-quill-new";
+import MainBlogSkeleton from "./skeletons/MainBlogSkeleton";
 
 type FormValues = {
   title: string;
@@ -68,7 +69,7 @@ export default function MainBlog() {
 
   const showError = (fieldName: keyof FormValues) => {
     const field = form.getFieldValue(fieldName);
-    return submitAttempted && !field?.trim();
+    return submitAttempted && typeof field === "string" && !field.trim();
   };
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -108,7 +109,8 @@ export default function MainBlog() {
     form.handleSubmit();
   };
 
-  if (isLoading || proFileLoading) return <p>Loading...</p>;
+  if (isLoading || proFileLoading) return <MainBlogSkeleton />;
+
   if (isError || profileError) return <p>Error loading data</p>;
 
   return (

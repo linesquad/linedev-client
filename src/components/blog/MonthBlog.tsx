@@ -46,7 +46,7 @@ export default function MonthBlog() {
 
   // თითო თვის ბლოგების რაოდენობა
   const blogCounts = new Array(12).fill(0);
-  data.blogs.forEach((blog) => {
+  data.blogs.forEach((blog: { createdAt: string | number | Date }) => {
     const month = new Date(blog.createdAt).getMonth();
     blogCounts[month]++;
   });

@@ -19,6 +19,7 @@ import { useDeleteBlogUser } from "../../hooks/useDeleteBlog";
 import Update from "./Update";
 import { usePaginatedBlogs } from "../../hooks/usePaginatedBlogs";
 import TableFooter from "./TableFooter";
+import BlogsSkeleton from "./skeletons/BlogsSkeleton";
 
 type Blog = {
   _id: number;
@@ -44,13 +45,12 @@ export default function AllBlogs() {
   const handleDeletePost = (postId: number) => {
     mutate(postId);
   };
-  // const limit = Math.ceil(pagination.total / pagination.totalPages);
 
   // მონაცემები პაგინაციის მიხედვით, სერჩით ფილტრით
   const tableData = useMemo<Blog[]>(() => {
     const blogs = pagination?.blogs ?? [];
     if (!search.trim()) return blogs;
-    return blogs.filter((blog) =>
+    return blogs.filter((blog: { title: string; }) =>
       blog.title.toLowerCase().includes(search.toLowerCase())
     );
   }, [pagination, search]);
@@ -158,7 +158,7 @@ export default function AllBlogs() {
             {isLoading ? (
               <tr>
                 <td colSpan={columns.length + 2} className="p-4 text-center">
-                  Loading...
+                  <BlogsSkeleton />
                 </td>
               </tr>
             ) : isError ? (
@@ -251,7 +251,7 @@ export default function AllBlogs() {
         )}
       </motion.div>
 
-      {/* Modal for update form rendered outside the table */}
+    
       <AnimatePresence>
         {isModalOpen && selectedBlog && (
           <motion.div
