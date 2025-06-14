@@ -44,7 +44,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            className="hover:bg-[#E93314] transition-colors"
+            className="hover:bg-[#E93314]  cursor-pointer transition-colors"
             onClick={(e) => {
               e.preventDefault();
               onPageChange(currentPage - 1);
@@ -74,7 +74,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({
 
         <PaginationItem>
           <PaginationNext
-            className="hover:bg-[#E93314] transition-colors"
+            className="hover:bg-[#E93314]  cursor-pointer transition-colors"
             onClick={(e) => {
               e.preventDefault();
               onPageChange(currentPage + 1);

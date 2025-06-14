@@ -30,8 +30,10 @@ export default function MainBlog() {
     isLoading: proFileLoading,
     isError: profileError,
   } = useGetProfile();
+
   const { mutate } = useCreateBlog();
   const { isLoading, isError } = useGetBloggerPosts();
+  const [quillHtml, setQuillHtml] = useState("");
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -44,15 +46,13 @@ export default function MainBlog() {
     },
     onSubmit: async ({ value }) => {
       setSubmitAttempted(true);
-
-      if (!profile?.user?.name) {
-        toast.error("User profile not loaded");
-        return;
-      }
+      if (!profile?.user?.name) return toast.error("User profile not loaded");
       if (!value.title.trim()) return toast.error("Title is required");
       if (!value.content.trim()) return toast.error("Content is required");
       if (!value.image.trim()) return toast.error("Image is required");
       if (!value.category.trim()) return toast.error("Category is required");
+      if (!value.tags || value.tags.length === 0)
+        return toast.error("At least one tag is required");
 
       try {
         await mutate({ ...value, author: profile.user.id });
@@ -82,12 +82,11 @@ export default function MainBlog() {
       setTagInput("");
     }
   };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    const currentTags = form.getFieldValue("tags");
+  const handleRemoveTag = (tag: string) => {
+    const currentTags = form.getFieldValue("tags") || [];
     form.setFieldValue(
       "tags",
-      currentTags.filter((tag) => tag !== tagToRemove)
+      currentTags.filter((t: string) => t !== tag)
     );
   };
 
@@ -110,13 +109,12 @@ export default function MainBlog() {
   };
 
   if (isLoading || proFileLoading) return <MainBlogSkeleton />;
-
   if (isError || profileError) return <p>Error loading data</p>;
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-4xl mx-auto p-6 bg-[#2b2146fa] text-[#fff] border-[3px] border-[#AD46FF] rounded-xl shadow-md mt-[80px]"
+      className="max-w-6xl mx-auto mt-10 px-4 sm:px-6 py-6 border border-[#AD46FF] rounded-2xl shadow-[0_10px_25px_-10px_rgba(173,70,255,0.5)] bg-[#1f1f2b] duration-300 text-white"
     >
       <div className="flex space-x-4 mb-6 border-b pb-2">
         {["content", "media", "categories"].map((tab) => (
@@ -124,10 +122,10 @@ export default function MainBlog() {
             type="button"
             key={tab}
             onClick={() => setActiveTab(tab as typeof activeTab)}
-            className={`py-2 px-4 rounded-t ${
+            className={`py-2 px-4 rounded-t transition font-medium ${
               activeTab === tab
-                ? "border-b-2 border-orange-500 text-orange-600 font-semibold"
-                : "text-white"
+                ? "border-b-2 border-orange-500 text-orange-400"
+                : "text-white hover:text-orange-300"
             }`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -145,7 +143,9 @@ export default function MainBlog() {
                   type="text"
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full border px-3 py-2 rounded ${showError("title") ? "border-red-500" : ""}`}
+                  className={`w-full border border-white/20 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/40 px-4 py-2 rounded-md bg-white/5 backdrop-blur-sm placeholder-white/70 transition-all duration-200 ${
+                    showError("title") ? "border-red-500" : ""
+                  }`}
                   placeholder="Enter blog title"
                 />
                 {showError("title") && (
@@ -154,15 +154,24 @@ export default function MainBlog() {
               </div>
             )}
           </form.Field>
+
           <form.Field name="content">
             {(field) => (
               <div>
                 <label className="block font-medium mb-1">Content*</label>
                 <ReactQuill
                   theme="snow"
-                  value={field.state.value}
-                  onChange={field.handleChange}
-                  className={`w-full rounded-md ${showError("content") ? "border border-red-500" : "border border-white"}`}
+                  value={quillHtml}
+                  onChange={(html) => {
+                    setQuillHtml(html);
+                    const plainText = html
+                      .replace(/<\/?[^>]+(>|$)/g, "")
+                      .trim();
+                    field.handleChange(plainText);
+                  }}
+                  className={`w-full rounded-md bg-white/5 backdrop-blur-sm border border-white/20 transition-all duration-200 focus-within:ring-2 focus-within:ring-orange-400/40 ${
+                    showError("content") ? "border-red-500" : ""
+                  }`}
                   placeholder="Write your blog content..."
                 />
                 {showError("content") && (
@@ -190,7 +199,9 @@ export default function MainBlog() {
                   field.handleChange(e.target.value);
                   setImagePreview(e.target.value);
                 }}
-                className={`w-full border px-3 py-2 rounded ${showError("image") ? "border-red-500" : ""}`}
+                className={`w-full border border-white/20 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/40 px-4 py-2 rounded-md bg-white/5 backdrop-blur-sm placeholder-white/70 transition-all duration-200 ${
+                  showError("image") ? "border-red-500" : ""
+                }`}
                 placeholder="https://example.com/image.jpg"
               />
               <input
@@ -207,7 +218,7 @@ export default function MainBlog() {
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="max-h-60 rounded"
+                    className="max-h-60 rounded-lg shadow-md"
                   />
                 </div>
               )}
@@ -226,7 +237,9 @@ export default function MainBlog() {
                   type="text"
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full border px-3 py-2 rounded ${showError("category") ? "border-red-500" : ""}`}
+                  className={`w-full border border-white/20 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/40 px-4 py-2 rounded-md bg-white/5 backdrop-blur-sm placeholder-white/70 transition-all duration-200 ${
+                    showError("category") ? "border-red-500" : ""
+                  }`}
                   placeholder="Enter category"
                 />
                 {showError("category") && (
@@ -241,35 +254,38 @@ export default function MainBlog() {
           <div>
             <label className="block font-medium mb-1">Tags</label>
             <input
-              type="text"
-              className="w-full border px-3 py-2 rounded"
-              placeholder="Type tag and press Enter"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleAddTag}
+              className="w-full border px-3 py-2 rounded"
+              placeholder="Type tag and press Enter"
             />
-            <div className="flex flex-wrap mt-2 gap-2">
-              {form.getFieldValue("tags").map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-sm flex items-center"
-                >
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTag(tag)}
-                    className="ml-1 text-orange-500 hover:text-orange-700"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
+            <form.Field name="tags">
+              {(field) => (
+                <div className="flex flex-wrap mt-2 gap-2">
+                  {field.state.value?.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center mr-2 px-2 py-1 bg-gray-700 text-white rounded"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTag(tag)}
+                        className="ml-1 text-orange-500 hover:text-orange-700"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </form.Field>
           </div>
 
           <form.Field name="isFeatured">
             {(field) => (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 mt-4">
                 <input
                   type="checkbox"
                   checked={field.state.value}
@@ -288,20 +304,8 @@ export default function MainBlog() {
 
       <div className="flex justify-end space-x-4 mt-8">
         <button
-          type="button"
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm px-4 py-2 rounded"
-          onClick={() => {
-            form.reset();
-            setTagInput("");
-            setImagePreview("");
-            setSubmitAttempted(false);
-          }}
-        >
-          Save Draft
-        </button>
-        <button
           type="submit"
-          className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded"
+          className="bg-orange-500 cursor-pointer hover:bg-orange-600 text-white text-sm px-6 py-2 rounded-lg shadow-lg transition-all duration-200 hover:shadow-orange-500/30"
         >
           Publish
         </button>

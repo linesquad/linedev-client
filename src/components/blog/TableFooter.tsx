@@ -22,7 +22,7 @@ function TableFooter({
       className="flex justify-between items-center"
     >
       <div className="px-2">
-        <p className="text-[#67757C]">
+        <p className="text-[#ececec]">
           Showing {currentPage} to {postsLength || 0} of {total || 0} posts
         </p>
       </div>

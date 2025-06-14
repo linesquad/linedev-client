@@ -15,7 +15,7 @@ function RouteComponent() {
 
 function Blog() {
   return (
-    <div className="mt-[80px] bg-[#0E0C15]">
+    <div className="mt-[80px] p-2 bg-[#0E0C15]">
       <MainWrapper>
         <Profile />
         <MonthBlog />

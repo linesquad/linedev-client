@@ -1,6 +1,7 @@
 import { useGetBloggerPosts } from "../../hooks/useGetBlog";
 import { useGetProfile } from "../../hooks/useGetProfile";
 import { IoBagSharp } from "react-icons/io5";
+
 export default function Profile() {
   const { data: profile } = useGetProfile();
 
@@ -11,30 +12,38 @@ export default function Profile() {
   } = useGetBloggerPosts();
 
   return (
-    <div className="flex items-center justify-center gap-[100px] p-2">
-      <div className="h-[150px] text-[#fff] flex flex-col  justify-center border-[3px] border-[#AD46FF]   w-[180px] rounded-lg shadow-md">
-        <h1 className="text-lg font-semibold text-center mb-2">Profile</h1>
-        <div className="flex items-center  justify-around ">
-          <IoBagSharp className="text-gray-500 text-2xl" />
+    <div className="flex flex-col md:flex-row justify-center gap-8 p-6 max-w-5xl mx-auto">
+      {/* Profile Card */}
+      <div className="bg-[#1f1f2b] border border-[#AD46FF] rounded-2xl shadow-xl p-6 w-full max-w-[280px] transition-transform hover:scale-[1.02]">
+        <h1 className="text-lg font-semibold text-white mb-4 text-center">
+          Profile
+        </h1>
+        <div className="flex items-center gap-4">
+          <div className="bg-[#2b2b39] p-3 rounded-full">
+            <IoBagSharp className="text-[#AD46FF] text-2xl" />
+          </div>
           <div>
-            <h1 className="text-[18px] font-semibold text-[#fff]">
+            <p className="text-white text-md font-medium">
               {profile?.user?.name}
-            </h1>
-            <h1 className="text-[#ccc] font-semibold text-[15px]">
+            </p>
+            <p className="text-gray-400 text-sm capitalize">
               {profile?.user?.role}
-            </h1>
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="h-[150px] text-[#fff] flex flex-col justify-center items-center border-[3px] border-[#AD46FF]  w-[180px] rounded-lg shadow-md">
-        <h1 className="text-lg font-semibold mb-2">All Blogs</h1>
+      {/* Blogs Count Card */}
+      <div className="bg-[#1f1f2b] border border-[#AD46FF] rounded-2xl shadow-xl p-6 w-full max-w-[280px] flex flex-col items-center justify-center transition-transform hover:scale-[1.02]">
+        <h1 className="text-lg font-semibold text-white mb-4">All Blogs</h1>
         {blogsLoading ? (
-          <p>Loading...</p>
+          <p className="text-gray-400">Loading...</p>
         ) : blogsError ? (
-          <p>Error loading blogs</p>
+          <p className="text-red-400">Error loading blogs</p>
         ) : (
-          <p>{blogsData?.blogs?.length ?? 0}</p>
+          <p className="text-white text-2xl font-bold">
+            {blogsData?.blogs?.length ?? 0}
+          </p>
         )}
       </div>
     </div>
