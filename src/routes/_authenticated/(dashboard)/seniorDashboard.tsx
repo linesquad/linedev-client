@@ -5,6 +5,7 @@ import CreateYourLogo from "../../../components/seniordashboard/yourlogo/CreateY
 import { useState } from "react";
 import UpdateYourLogo from "../../../components/seniordashboard/yourlogo/UpdateYourLogo";
 import MainWrapper from "../../../components/MainWrapper";
+import ImageKit from "../../../components/ImageKit";
 
 export const Route = createFileRoute(
   "/_authenticated/(dashboard)/seniorDashboard"
@@ -55,6 +56,7 @@ function SeniorDashboard() {
               setSelectedId={setSelectedId}
             />
             <PricingData />
+            <ImageKit />
           </div>
         </div>
       </div>

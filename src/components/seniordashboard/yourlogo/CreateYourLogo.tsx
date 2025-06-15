@@ -1,6 +1,7 @@
 import { useCreateYourLogo } from "../../../hooks/yourlogo/useCreateYourLogo";
 import { useState } from "react";
 import Modal from "../../modal/Modal";
+import UploadExample from "../../ImageKit";
 
 function CreateYourLogo({
   handleCloseModal,
@@ -11,22 +12,6 @@ function CreateYourLogo({
 }) {
   const { mutate: createYourLogo } = useCreateYourLogo();
   const [imageURL, setImageURL] = useState<string>("");
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if(!file) return
-    const data = new FormData()
-    data.append("file", file)
-    data.append("upload_preset", "linedev_client_cloudinary")
-    data.append("cloud_name", "dbhwfcf0d")
-    const res = await fetch(` https://api.cloudinary.com/v1_1/dbhwfcf0d/image/upload`, {
-      method: "POST",
-      body: data,
-    })
-
-    const uploadedImageURL = await res.json()
-    setImageURL(uploadedImageURL.url)
-  };
 
   const handleCreateYourLogo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -93,15 +78,7 @@ function CreateYourLogo({
                     Logo Image
                   </label>
                   <div className="relative">
-                    <input
-                      type="file"
-                      id="image"
-                      name="image"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all duration-200 cursor-pointer"
-                      required
-                    />
+                    <UploadExample setImageURL={setImageURL} />
                   </div>
                 </div>
               </div>
