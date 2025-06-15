@@ -22,104 +22,112 @@ export const ImageKitDisplay = () => {
 
 const UploadExample = ({setImageURL}: {setImageURL: (url: string) => void}) => {
   const [progress, setProgress] = useState(0);
-
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const abortController = new AbortController();
 
-
   const authenticator = async () => {
-      try {
-          const response = await fetch("/auth/imagekit");
-          if (!response.ok) {
-              const errorText = await response.text();
-              throw new Error(`Request failed with status ${response.status}: ${errorText}`);
-          }
-
-          const data = await response.json();
-          const { signature, expire, token, publicKey } = data;
-          return { signature, expire, token, publicKey };
-      } catch (error) {
-          console.error("Authentication error:", error);
-          throw new Error("Authentication request failed");
+    try {
+      const response = await fetch("/auth/imagekit");
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Request failed with status ${response.status}: ${errorText}`);
       }
+
+      const data = await response.json();
+      const { signature, expire, token, publicKey } = data;
+      return { signature, expire, token, publicKey };
+    } catch (error) {
+      console.error("Authentication error:", error);
+      throw new Error("Authentication request failed");
+    }
   };
 
-
   const handleUpload = async () => {
-      const fileInput = fileInputRef.current;
-      if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-          alert("Please select a file to upload");
-          return;
-      }
+    const fileInput = fileInputRef.current;
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+      alert("Please select a file to upload");
+      return;
+    }
 
-      const file = fileInput.files[0];
+    setIsUploading(true);
+    const file = fileInput.files[0];
 
-      let authParams;
-      try {
-          authParams = await authenticator();
-      } catch (authError) {
-          console.error("Failed to authenticate for upload:", authError);
-          return;
-      }
-      const { signature, expire, token, publicKey } = authParams;
+    let authParams;
+    try {
+      authParams = await authenticator();
+    } catch (authError) {
+      console.error("Failed to authenticate for upload:", authError);
+      setIsUploading(false);
+      return;
+    }
+    const { signature, expire, token, publicKey } = authParams;
 
-      try {
-          const uploadResponse = await upload({
-              expire,
-              token,
-              signature,
-              publicKey,
-              file,
-              fileName: file.name, 
-              onProgress: (event) => {
-                  setProgress((event.loaded / event.total) * 100);
-              },
-              abortSignal: abortController.signal,
-          });
-          console.log("Upload response:", uploadResponse);
-          if (uploadResponse && uploadResponse.url) {
-              setImageURL(uploadResponse.url);
-          }
-      } catch (error) {
-          if (error instanceof ImageKitAbortError) {
-              console.error("Upload aborted:", error.reason);
-          } else if (error instanceof ImageKitInvalidRequestError) {
-              console.error("Invalid request:", error.message);
-          } else if (error instanceof ImageKitUploadNetworkError) {
-              console.error("Network error:", error.message);
-          } else if (error instanceof ImageKitServerError) {
-              console.error("Server error:", error.message);
-          } else {
-              console.error("Upload error:", error);
-          }
+    try {
+      const uploadResponse = await upload({
+        expire,
+        token,
+        signature,
+        publicKey,
+        file,
+        fileName: file.name, 
+        onProgress: (event) => {
+          setProgress((event.loaded / event.total) * 100);
+        },
+        abortSignal: abortController.signal,
+      });
+      
+      if (uploadResponse && uploadResponse.url) {
+        setImageURL(uploadResponse.url);
       }
+    } catch (error) {
+      if (error instanceof ImageKitAbortError) {
+        console.error("Upload aborted:", error.reason);
+      } else if (error instanceof ImageKitInvalidRequestError) {
+        console.error("Invalid request:", error.message);
+      } else if (error instanceof ImageKitUploadNetworkError) {
+        console.error("Network error:", error.message);
+      } else if (error instanceof ImageKitServerError) {
+        console.error("Server error:", error.message);
+      } else {
+        console.error("Upload error:", error);
+      }
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
-      <div className="imagekit-upload-container">
-          <div className="upload-section">
-              <input type="file" ref={fileInputRef} accept="image/*" />
-              <button type="button" onClick={handleUpload}>
-                  Upload file
-              </button>
-              <br />
-              Upload progress: <progress value={progress} max={100}></progress>
-          </div>
-          
-          {/* {uploadedImageUrl && (
-              <div className="image-preview">
-                  <h3>Uploaded Image:</h3>
-                  <Image
-                      urlEndpoint="https://ik.imagekit.io/cm4yjrvzz"
-                      src={uploadedImageUrl}
-                      width={300}
-                      height={300}
-                      alt="Uploaded image"
-                  />
-              </div>
-          )} */}
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <label className="relative cursor-pointer bg-gray-800 hover:bg-gray-700 text-white py-2 px-4 rounded-md transition-colors duration-200 flex-grow">
+          <span className="text-sm">{fileInputRef.current?.files?.[0]?.name || "Choose image"}</span>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            accept="image/*" 
+            className="hidden" 
+          />
+        </label>
+        <button 
+          type="button" 
+          onClick={handleUpload}
+          disabled={isUploading}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isUploading ? "Uploading..." : "Upload"}
+        </button>
       </div>
+      
+      {progress > 0 && progress < 100 && (
+        <div className="w-full bg-gray-700 rounded-full h-1.5 overflow-hidden">
+          <div 
+            className="bg-blue-500 h-1.5 rounded-full transition-all duration-300 ease-in-out" 
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      )}
+    </div>
   );
 };
 
