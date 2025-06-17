@@ -8,5 +8,4 @@ export const navLinks = [
   { to: "/", label: "Home" },
   { to: "/profile", label: "Profile" },
   { to: user ? `/${role}Dashboard` : "/signin", label: "Dashboard" },
-  { to: role === "senior" ? "/blog" : "/signin", label: "Blog" },
 ];

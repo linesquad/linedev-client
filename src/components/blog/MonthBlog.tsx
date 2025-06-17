@@ -38,7 +38,11 @@ export default function MonthBlog() {
   const { data, isLoading, isError } = useGetBloggerPosts();
   console.log(data);
   if (isLoading)
-    return <p className="text-center mt-10 text-lg">იტვირთება...</p>;
+    return (
+      <div className="max-w-6xl h-[400px] mx-auto mt-10 px-4 bg-[#1f1f2b] rounded-xl shadow-lg p-6 animate-pulse">
+        <div className="h-full w-full bg-gray-700 rounded-lg"></div>
+      </div>
+    );
   if (isError)
     return (
       <p className="text-center mt-10 text-red-500">შეცდომა დატვირთვისას.</p>

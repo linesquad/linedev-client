@@ -14,8 +14,14 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SignupImport } from './routes/signup'
 import { Route as SigninImport } from './routes/signin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as BlogRouteImport } from './routes/blog/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as BlogIndexImport } from './routes/blog/index'
+import { Route as UpdateBlogIndexImport } from './routes/UpdateBlog/index'
+import { Route as BlogProfileImport } from './routes/blog/profile'
+import { Route as BlogMonthImport } from './routes/blog/month'
+import { Route as BlogMainImport } from './routes/blog/main'
+import { Route as BlogAllImport } from './routes/blog/all'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 import { Route as AuthenticateddashboardSeniorDashboardImport } from './routes/_authenticated/(dashboard)/seniorDashboard'
 import { Route as AuthenticateddashboardMiddleDashboardImport } from './routes/_authenticated/(dashboard)/middleDashboard'
@@ -41,6 +47,12 @@ const AuthenticatedRoute = AuthenticatedImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const BlogRouteRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
@@ -48,9 +60,39 @@ const IndexRoute = IndexImport.update({
 } as any)
 
 const BlogIndexRoute = BlogIndexImport.update({
-  id: '/blog/',
-  path: '/blog/',
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRouteRoute,
+} as any)
+
+const UpdateBlogIndexRoute = UpdateBlogIndexImport.update({
+  id: '/UpdateBlog/',
+  path: '/UpdateBlog/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const BlogProfileRoute = BlogProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => BlogRouteRoute,
+} as any)
+
+const BlogMonthRoute = BlogMonthImport.update({
+  id: '/month',
+  path: '/month',
+  getParentRoute: () => BlogRouteRoute,
+} as any)
+
+const BlogMainRoute = BlogMainImport.update({
+  id: '/main',
+  path: '/main',
+  getParentRoute: () => BlogRouteRoute,
+} as any)
+
+const BlogAllRoute = BlogAllImport.update({
+  id: '/all',
+  path: '/all',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 
 const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
@@ -98,6 +140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -126,12 +175,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/blog/all': {
+      id: '/blog/all'
+      path: '/all'
+      fullPath: '/blog/all'
+      preLoaderRoute: typeof BlogAllImport
+      parentRoute: typeof BlogRouteImport
+    }
+    '/blog/main': {
+      id: '/blog/main'
+      path: '/main'
+      fullPath: '/blog/main'
+      preLoaderRoute: typeof BlogMainImport
+      parentRoute: typeof BlogRouteImport
+    }
+    '/blog/month': {
+      id: '/blog/month'
+      path: '/month'
+      fullPath: '/blog/month'
+      preLoaderRoute: typeof BlogMonthImport
+      parentRoute: typeof BlogRouteImport
+    }
+    '/blog/profile': {
+      id: '/blog/profile'
+      path: '/profile'
+      fullPath: '/blog/profile'
+      preLoaderRoute: typeof BlogProfileImport
+      parentRoute: typeof BlogRouteImport
+    }
+    '/UpdateBlog/': {
+      id: '/UpdateBlog/'
+      path: '/UpdateBlog'
+      fullPath: '/UpdateBlog'
+      preLoaderRoute: typeof UpdateBlogIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/blog/': {
       id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog'
+      path: '/'
+      fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof BlogRouteImport
     }
     '/_authenticated/(dashboard)/clientDashboard': {
       id: '/_authenticated/(dashboard)/clientDashboard'
@@ -166,6 +250,26 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface BlogRouteRouteChildren {
+  BlogAllRoute: typeof BlogAllRoute
+  BlogMainRoute: typeof BlogMainRoute
+  BlogMonthRoute: typeof BlogMonthRoute
+  BlogProfileRoute: typeof BlogProfileRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+}
+
+const BlogRouteRouteChildren: BlogRouteRouteChildren = {
+  BlogAllRoute: BlogAllRoute,
+  BlogMainRoute: BlogMainRoute,
+  BlogMonthRoute: BlogMonthRoute,
+  BlogProfileRoute: BlogProfileRoute,
+  BlogIndexRoute: BlogIndexRoute,
+}
+
+const BlogRouteRouteWithChildren = BlogRouteRoute._addFileChildren(
+  BlogRouteRouteChildren,
+)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticateddashboardClientDashboardRoute: typeof AuthenticateddashboardClientDashboardRoute
@@ -192,11 +296,17 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRouteRouteWithChildren
   '': typeof AuthenticatedRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
-  '/blog': typeof BlogIndexRoute
+  '/blog/all': typeof BlogAllRoute
+  '/blog/main': typeof BlogMainRoute
+  '/blog/month': typeof BlogMonthRoute
+  '/blog/profile': typeof BlogProfileRoute
+  '/UpdateBlog': typeof UpdateBlogIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
@@ -209,6 +319,11 @@ export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/blog/all': typeof BlogAllRoute
+  '/blog/main': typeof BlogMainRoute
+  '/blog/month': typeof BlogMonthRoute
+  '/blog/profile': typeof BlogProfileRoute
+  '/UpdateBlog': typeof UpdateBlogIndexRoute
   '/blog': typeof BlogIndexRoute
   '/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
@@ -219,10 +334,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/blog': typeof BlogRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/blog/all': typeof BlogAllRoute
+  '/blog/main': typeof BlogMainRoute
+  '/blog/month': typeof BlogMonthRoute
+  '/blog/profile': typeof BlogProfileRoute
+  '/UpdateBlog/': typeof UpdateBlogIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/_authenticated/(dashboard)/clientDashboard': typeof AuthenticateddashboardClientDashboardRoute
   '/_authenticated/(dashboard)/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
@@ -234,11 +355,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/blog'
     | ''
     | '/signin'
     | '/signup'
     | '/profile'
-    | '/blog'
+    | '/blog/all'
+    | '/blog/main'
+    | '/blog/month'
+    | '/blog/profile'
+    | '/UpdateBlog'
+    | '/blog/'
     | '/clientDashboard'
     | '/juniorDashboard'
     | '/middleDashboard'
@@ -250,6 +377,11 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/profile'
+    | '/blog/all'
+    | '/blog/main'
+    | '/blog/month'
+    | '/blog/profile'
+    | '/UpdateBlog'
     | '/blog'
     | '/clientDashboard'
     | '/juniorDashboard'
@@ -258,10 +390,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/blog'
     | '/_authenticated'
     | '/signin'
     | '/signup'
     | '/_authenticated/profile'
+    | '/blog/all'
+    | '/blog/main'
+    | '/blog/month'
+    | '/blog/profile'
+    | '/UpdateBlog/'
     | '/blog/'
     | '/_authenticated/(dashboard)/clientDashboard'
     | '/_authenticated/(dashboard)/juniorDashboard'
@@ -272,18 +410,20 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlogRouteRoute: typeof BlogRouteRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
-  BlogIndexRoute: typeof BlogIndexRoute
+  UpdateBlogIndexRoute: typeof UpdateBlogIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlogRouteRoute: BlogRouteRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
-  BlogIndexRoute: BlogIndexRoute,
+  UpdateBlogIndexRoute: UpdateBlogIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -297,14 +437,25 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/blog",
         "/_authenticated",
         "/signin",
         "/signup",
-        "/blog/"
+        "/UpdateBlog/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/blog": {
+      "filePath": "blog/route.tsx",
+      "children": [
+        "/blog/all",
+        "/blog/main",
+        "/blog/month",
+        "/blog/profile",
+        "/blog/"
+      ]
     },
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
@@ -326,8 +477,28 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/profile.tsx",
       "parent": "/_authenticated"
     },
+    "/blog/all": {
+      "filePath": "blog/all.tsx",
+      "parent": "/blog"
+    },
+    "/blog/main": {
+      "filePath": "blog/main.tsx",
+      "parent": "/blog"
+    },
+    "/blog/month": {
+      "filePath": "blog/month.tsx",
+      "parent": "/blog"
+    },
+    "/blog/profile": {
+      "filePath": "blog/profile.tsx",
+      "parent": "/blog"
+    },
+    "/UpdateBlog/": {
+      "filePath": "UpdateBlog/index.tsx"
+    },
     "/blog/": {
-      "filePath": "blog/index.tsx"
+      "filePath": "blog/index.tsx",
+      "parent": "/blog"
     },
     "/_authenticated/(dashboard)/clientDashboard": {
       "filePath": "_authenticated/(dashboard)/clientDashboard.tsx",

@@ -1,6 +1,3 @@
-
-
-
 import { useForm } from "@tanstack/react-form";
 import { toast } from "react-hot-toast";
 import { useUpdateBlog } from "../../hooks/useUpdateBlog";
@@ -10,20 +7,24 @@ interface UpdateProps {
   selectedBlog: any;
   setIsModalOpen: (open: boolean) => void;
 }
-
-interface FormValues {
+type FormValues = {
   title: string;
   content: string;
   image: string;
   category: string;
   tags: string[];
   isFeatured: boolean;
-}
+};
 
-export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
+export default function UpdateBlog({
+  selectedBlog,
+  setIsModalOpen,
+}: UpdateProps) {
   const { mutate, isPending } = useUpdateBlog();
   const [tagInput, setTagInput] = useState("");
-  const form = useForm<FormValues>({
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  const form = useForm({
     defaultValues: {
       title: selectedBlog?.title || "",
       content: selectedBlog?.content || "",
@@ -33,6 +34,15 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
       isFeatured: selectedBlog?.isFeatured || false,
     },
     onSubmit: async ({ value }) => {
+      setSubmitAttempted(true);
+
+      // Validation
+      if (!value.title.trim()) return;
+      if (!value.content.trim()) return;
+      if (!value.image.trim()) return;
+      if (!value.category.trim()) return;
+      if (!value.tags || value.tags.length === 0) return;
+
       mutate({
         blogId: selectedBlog._id,
         title: value.title,
@@ -48,6 +58,20 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
       toast.success("Blog updated successfully");
     },
   });
+
+  const showError = <K extends keyof FormValues>(fieldName: K): boolean => {
+    const value = form.getFieldValue(fieldName);
+
+    return (
+      submitAttempted &&
+      (typeof value === "string"
+        ? !value.trim()
+        : Array.isArray(value)
+          ? value.length === 0
+          : false)
+    );
+  };
+
   const handleRemoveTag = (tag: string) => {
     const currentTags = form.getFieldValue("tags") || [];
     form.setFieldValue(
@@ -55,6 +79,7 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
       currentTags.filter((t: string) => t !== tag)
     );
   };
+
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       e.preventDefault();
@@ -65,10 +90,17 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
       setTagInput("");
     }
   };
+
   return (
-    <div className="space-y-4 text-sm">
+    <div className="bg-[#1f1f2b] text-white p-6 rounded-xl border border-[#AD46FF] shadow-2xl w-[90%] max-w-lg">
       <h2 className="text-lg font-semibold">Update Blog Post</h2>
-      <form onSubmit={(e) => form.handleSubmit(e)} className="space-y-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}
+        className="space-y-4"
+      >
         <form.Field name="title">
           {(field) => (
             <div>
@@ -77,8 +109,13 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
                 type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
+                className={`w-full border px-3 py-2 rounded ${
+                  showError("title") ? "border-red-500" : ""
+                }`}
               />
+              {showError("title") && (
+                <p className="text-red-500 text-xs mt-1">Title is required</p>
+              )}
             </div>
           )}
         </form.Field>
@@ -90,8 +127,13 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
               <textarea
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
+                className={`w-full border px-3 py-2 rounded ${
+                  showError("content") ? "border-red-500" : ""
+                }`}
               />
+              {showError("content") && (
+                <p className="text-red-500 text-xs mt-1">Content is required</p>
+              )}
             </div>
           )}
         </form.Field>
@@ -104,8 +146,13 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
                 type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
+                className={`w-full border px-3 py-2 rounded ${
+                  showError("image") ? "border-red-500" : ""
+                }`}
               />
+              {showError("image") && (
+                <p className="text-red-500 text-xs mt-1">Image is required</p>
+              )}
             </div>
           )}
         </form.Field>
@@ -118,8 +165,15 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
                 type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
+                className={`w-full border px-3 py-2 rounded ${
+                  showError("category") ? "border-red-500" : ""
+                }`}
               />
+              {showError("category") && (
+                <p className="text-red-500 text-xs mt-1">
+                  Category is required
+                </p>
+              )}
             </div>
           )}
         </form.Field>
@@ -154,6 +208,11 @@ export default function Update({ selectedBlog, setIsModalOpen }: UpdateProps) {
               </div>
             )}
           </form.Field>
+          {showError("tags") && (
+            <p className="text-red-500 text-xs mt-1">
+              At least one tag is required
+            </p>
+          )}
         </div>
 
         <form.Field name="isFeatured">

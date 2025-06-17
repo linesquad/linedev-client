@@ -13,7 +13,6 @@ export default function Profile() {
 
   return (
     <div className="flex flex-col md:flex-row justify-center gap-8 p-6 max-w-5xl mx-auto">
-      {/* Profile Card */}
       <div className="bg-[#1f1f2b] border border-[#AD46FF] rounded-2xl shadow-xl p-6 w-full max-w-[280px] transition-transform hover:scale-[1.02]">
         <h1 className="text-lg font-semibold text-white mb-4 text-center">
           Profile
@@ -33,7 +32,6 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Blogs Count Card */}
       <div className="bg-[#1f1f2b] border border-[#AD46FF] rounded-2xl shadow-xl p-6 w-full max-w-[280px] flex flex-col items-center justify-center transition-transform hover:scale-[1.02]">
         <h1 className="text-lg font-semibold text-white mb-4">All Blogs</h1>
         {blogsLoading ? (
@@ -41,9 +39,7 @@ export default function Profile() {
         ) : blogsError ? (
           <p className="text-red-400">Error loading blogs</p>
         ) : (
-          <p className="text-white text-2xl font-bold">
-            {blogsData?.blogs?.length ?? 0}
-          </p>
+          <p className="text-white text-2xl font-bold">{blogsData?.total}</p>
         )}
       </div>
     </div>

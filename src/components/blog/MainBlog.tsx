@@ -35,39 +35,50 @@ export default function MainBlog() {
   const { isLoading, isError } = useGetBloggerPosts();
   const [quillHtml, setQuillHtml] = useState("");
 
-  const form = useForm<FormValues>({
-    defaultValues: {
-      title: "",
-      content: "",
-      image: "",
-      category: "",
-      tags: [],
-      isFeatured: false,
-    },
-    onSubmit: async ({ value }) => {
-      setSubmitAttempted(true);
-      if (!profile?.user?.name) return toast.error("User profile not loaded");
-      if (!value.title.trim()) return toast.error("Title is required");
-      if (!value.content.trim()) return toast.error("Content is required");
-      if (!value.image.trim()) return toast.error("Image is required");
-      if (!value.category.trim()) return toast.error("Category is required");
-      if (!value.tags || value.tags.length === 0)
-        return toast.error("At least one tag is required");
+  const form = useForm<FormValues, any, any, any, any, any, any, any, any, any>(
+    {
+      defaultValues: {
+        title: "",
+        content: "",
+        image: "",
+        category: "",
+        tags: [],
+        isFeatured: false,
+      },
+      onSubmit: async ({ value }) => {
+        setSubmitAttempted(true);
+        if (!profile?.user?.name) return toast.error("User profile not loaded");
+        if (!value.title.trim()) return toast.error("Title is required");
+        if (!value.content.trim()) return toast.error("Content is required");
+        if (!value.image.trim()) return toast.error("Image is required");
+        if (!value.category.trim()) return toast.error("Category is required");
+        if (!value.tags || value.tags.length === 0)
+          return toast.error("At least one tag is required");
 
-      try {
-        await mutate({ ...value, author: profile.user.id });
-        toast.success("Blog post published successfully!");
-        form.reset();
-        setTagInput("");
-        setImagePreview("");
-        setSubmitAttempted(false);
-      } catch {
-        toast.error("Failed to publish blog post");
-      }
-    },
-  });
+        try {
+          await mutate({ ...value, author: profile.user.id });
+          toast.success("Blog post published successfully!");
+          form.reset();
+          setTagInput("");
+          setImagePreview("");
+          setQuillHtml("");
+          setSubmitAttempted(false);
+        } catch {
+          toast.error("Failed to publish blog post");
+        }
+      },
+    }
+  );
 
   const showError = (fieldName: keyof FormValues) => {
+    if (fieldName === "content") {
+      const plainText = quillHtml.replace(/<\/?[^>]+(>|$)/g, "").trim();
+      return submitAttempted && plainText === "";
+    }
+    if (fieldName === "tags") {
+      const tags = form.getFieldValue("tags");
+      return submitAttempted && (!tags || tags.length === 0);
+    }
     const field = form.getFieldValue(fieldName);
     return submitAttempted && typeof field === "string" && !field.trim();
   };
@@ -278,6 +289,11 @@ export default function MainBlog() {
                       </button>
                     </span>
                   ))}
+                  {showError("tags") && (
+                    <p className="text-red-500 text-sm mt-1">
+                      At least one tag is required
+                    </p>
+                  )}
                 </div>
               )}
             </form.Field>
