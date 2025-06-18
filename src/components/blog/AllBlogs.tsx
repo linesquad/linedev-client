@@ -13,7 +13,7 @@ import Update from "./UpdateBlog";
 import { usePaginatedBlogs } from "../../hooks/usePaginatedBlogs";
 import TableFooter from "./TableFooter";
 import BlogsSkeleton from "./skeletons/BlogsSkeleton";
-
+import { useNavigate } from "@tanstack/react-router";
 type Blog = {
   _id: number;
   title: string;
@@ -76,6 +76,7 @@ export default function AllBlogs() {
       blog.title.toLowerCase().includes(search.toLowerCase())
     );
   }, [pagination, search]);
+  const navigate = useNavigate();
 
   const columns = useMemo<ColumnDef<Blog>[]>(
     () => [
@@ -226,6 +227,9 @@ export default function AllBlogs() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2, delay: index * 0.05 }}
                         className="hover:bg-[#34344a] transition"
+                        onClick={() =>
+                          navigate({ to: `/blog/${row.original._id}` })
+                        }
                       >
                         {row.getVisibleCells().map((cell) => (
                           <td

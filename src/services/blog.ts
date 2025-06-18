@@ -116,3 +116,12 @@ export const getBlogsPaginated = async (
 
   return response.data;
 };
+
+export const GetSingleBlog = async (id: string | number) => {
+  const response = await instance.get(`/api/blogs/${id}`);
+  console.log("PRgia:", response.data);
+  if (!response) {
+    throw new Error("Failed to fetch the blog");
+  }
+  return response.data;
+};
