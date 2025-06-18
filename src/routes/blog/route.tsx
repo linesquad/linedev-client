@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
-import Sidebar from "../../components/blog/Sidebar"; // ← შენი sidebar
-import "../../index.css"; // თუ გინდა tailwind იმუშავოს
+import Sidebar from "../../components/blog/Sidebar";
 
 export const Route = createFileRoute("/blog")({
   component: BlogLayout,

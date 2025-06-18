@@ -9,11 +9,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MdDelete, MdOutlineSystemUpdateAlt } from "react-icons/md";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useDeleteBlogUser } from "../../hooks/useDeleteBlog";
-import Update from "./UpdateBlog";
 import { usePaginatedBlogs } from "../../hooks/usePaginatedBlogs";
 import TableFooter from "./TableFooter";
 import BlogsSkeleton from "./skeletons/BlogsSkeleton";
 import { useNavigate } from "@tanstack/react-router";
+
 type Blog = {
   _id: number;
   title: string;
@@ -68,15 +68,15 @@ export default function AllBlogs() {
     isError,
   } = usePaginatedBlogs(currentPage);
   const { mutate } = useDeleteBlogUser();
+  const navigate = useNavigate();
 
   const tableData = useMemo<Blog[]>(() => {
     const blogs = pagination?.blogs ?? [];
     if (!search.trim()) return blogs;
-    return blogs.filter((blog: { title: string }) =>
+    return blogs.filter((blog: { title: string; }) =>
       blog.title.toLowerCase().includes(search.toLowerCase())
     );
   }, [pagination, search]);
-  const navigate = useNavigate();
 
   const columns = useMemo<ColumnDef<Blog>[]>(
     () => [
@@ -107,7 +107,7 @@ export default function AllBlogs() {
         accessorKey: "content",
         cell: (info) => {
           const content = info.getValue() as string;
-          return content?.length > 15 ? `${content.slice(0, 15)}...` : content;
+          return content.length > 15 ? `${content.slice(0, 15)}...` : content;
         },
       },
       {
@@ -125,10 +125,6 @@ export default function AllBlogs() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
-
-  // Delete modal state
   const [isModalDelete, setIsModalDelete] = useState(false);
   const [selectedDeleteBlog, setSelectedDeleteBlog] = useState<Blog | null>(
     null
@@ -255,9 +251,11 @@ export default function AllBlogs() {
                         </td>
                         <td className="px-4 py-3 text-center border-t border-gray-700">
                           <button
-                            onClick={() => {
-                              setSelectedBlog(row.original);
-                              setIsModalOpen(true);
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate({
+                                to: `/blog/updatedBlog/${row.original._id}`,
+                              });
                             }}
                             className="p-2 cursor-pointer rounded-full bg-yellow-500/10 hover:bg-yellow-600/20 text-yellow-400 hover:text-yellow-500 transition"
                           >
@@ -300,21 +298,6 @@ export default function AllBlogs() {
       </motion.div>
 
       <AnimatePresence>
-        {isModalOpen && selectedBlog && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-14 left-1/2 transform -translate-x-1/2 z-50"
-          >
-            <Update
-              selectedBlog={selectedBlog}
-              setIsModalOpen={setIsModalOpen}
-            />
-          </motion.div>
-        )}
-
         {isModalDelete && selectedDeleteBlog && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}

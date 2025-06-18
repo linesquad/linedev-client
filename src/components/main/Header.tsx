@@ -61,27 +61,6 @@ function Header({ user, role, onLogout }: HeaderProps) {
                   {link.label}
                 </Link>
               ))}
-            {/* {user && role === "senior" && (
-              <div className="relative">
-                <button
-                  onClick={toggleDropdown}
-                  className="flex items-center cursor-pointer gap-2 px-4 py-2 text-n-1 hover:text-color-1 transition"
-                >
-                  <FaUser className="text-lg" />
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                    <Link
-                      to="/blog"
-                      onClick={() => setIsDropdownOpen(false)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Blog
-                    </Link>
-                  </div>
-                )}
-              </div>
-            )} */}
           </div>
         </nav>
 

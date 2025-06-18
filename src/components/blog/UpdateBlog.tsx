@@ -24,19 +24,20 @@ export default function UpdateBlog({
   const [tagInput, setTagInput] = useState("");
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
+  const blogData = selectedBlog?.data || {};
+
   const form = useForm({
     defaultValues: {
-      title: selectedBlog?.title || "",
-      content: selectedBlog?.content || "",
-      image: selectedBlog?.image || "",
-      category: selectedBlog?.category || "",
-      tags: selectedBlog?.tags || [],
-      isFeatured: selectedBlog?.isFeatured || false,
+      title: blogData.title || "",
+      content: blogData.content || "",
+      image: blogData.image || "",
+      category: blogData.category || "",
+      tags: blogData.tags || [],
+      isFeatured: blogData.isFeatured || false,
     },
     onSubmit: async ({ value }) => {
       setSubmitAttempted(true);
 
-      // Validation
       if (!value.title.trim()) return;
       if (!value.content.trim()) return;
       if (!value.image.trim()) return;
@@ -44,10 +45,10 @@ export default function UpdateBlog({
       if (!value.tags || value.tags.length === 0) return;
 
       mutate({
-        blogId: selectedBlog._id,
+        blogId: blogData._id,
         title: value.title,
         content: value.content,
-        author: selectedBlog.author,
+        author: blogData.author,
         tags: value.tags,
         image: value.image,
         category: value.category,
@@ -61,7 +62,6 @@ export default function UpdateBlog({
 
   const showError = <K extends keyof FormValues>(fieldName: K): boolean => {
     const value = form.getFieldValue(fieldName);
-
     return (
       submitAttempted &&
       (typeof value === "string"

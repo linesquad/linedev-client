@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MdDelete, MdOutlineSystemUpdateAlt } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDeleteBlogUser } from "../../hooks/useDeleteBlog";
-import Update from "./UpdateBlog";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function SingleBlog({
   blog,
@@ -11,7 +11,7 @@ export default function SingleBlog({
   blog: any;
   onUpdated?: () => void;
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDelete, setIsModalDelete] = useState(false);
 
   const { mutate } = useDeleteBlogUser();
@@ -24,14 +24,18 @@ export default function SingleBlog({
       },
     });
   };
-
+  const navigate = useNavigate();
   return (
     <div>
       <div className="max-w-3xl mx-auto p-6 bg-[#1f1f2b] text-white rounded-xl shadow-lg relative">
-       
         <div className="absolute top-4 right-4 flex gap-2">
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate({
+                to: `/blog/updatedBlog/${blog.data._id}`,
+              });
+            }}
             className="p-2 rounded-full bg-yellow-500/10 hover:bg-yellow-600/20 text-yellow-400 hover:text-yellow-500"
           >
             <MdOutlineSystemUpdateAlt size={20} />
@@ -73,17 +77,7 @@ export default function SingleBlog({
       </div>
 
       <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-14 left-1/2 transform -translate-x-1/2 z-50"
-          >
-            <Update selectedBlog={blog.data} setIsModalOpen={setIsModalOpen} />
-          </motion.div>
-        )}
+   
 
         {isModalDelete && (
           <motion.div
