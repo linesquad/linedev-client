@@ -25,9 +25,12 @@ export const signUp = async (name: string, email: string, password: string) => {
   }
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<{id: string, name: string}> => {
   const response = await instance.get("/api/profile/");
-  return response.data.user.id;
+  if(!response.data.user) {
+    throw new Error("User not found");
+  }
+  return {id: response.data.user.id, name: response.data.user.name};
 };
 
 export const getUserRole = async () => {

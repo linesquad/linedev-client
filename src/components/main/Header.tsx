@@ -13,9 +13,10 @@ import { navLinks } from "../../lib/navRoutes";
 interface HeaderProps {
   user: User | null;
   onLogout: () => void;
+  role: string | null;
 }
 
-function Header({ user, onLogout }: HeaderProps) {
+function Header({ user, onLogout, role }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -88,6 +89,18 @@ function Header({ user, onLogout }: HeaderProps) {
                 {link.label}
               </Link>
             ))}
+
+            {user &&
+              (role === "middle" || role === "senior" || role === "junior") && (
+                <Link
+                  to="/tasks"
+                  className="block font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 py-3"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Tasks
+                </Link>
+              )}
+
             {!user && (
               <>
                 <Link

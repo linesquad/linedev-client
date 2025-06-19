@@ -16,6 +16,7 @@ import { Route as SigninImport } from './routes/signin'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedtaskTasksImport } from './routes/_authenticated/(task)/tasks'
 import { Route as AuthenticateddashboardSeniorDashboardImport } from './routes/_authenticated/(dashboard)/seniorDashboard'
 import { Route as AuthenticateddashboardMiddleDashboardImport } from './routes/_authenticated/(dashboard)/middleDashboard'
 import { Route as AuthenticateddashboardJuniorDashboardImport } from './routes/_authenticated/(dashboard)/juniorDashboard'
@@ -49,6 +50,12 @@ const IndexRoute = IndexImport.update({
 const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedtaskTasksRoute = AuthenticatedtaskTasksImport.update({
+  id: '/(task)/tasks',
+  path: '/tasks',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -147,6 +154,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticateddashboardSeniorDashboardImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/(task)/tasks': {
+      id: '/_authenticated/(task)/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof AuthenticatedtaskTasksImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
@@ -158,6 +172,7 @@ interface AuthenticatedRouteChildren {
   AuthenticateddashboardJuniorDashboardRoute: typeof AuthenticateddashboardJuniorDashboardRoute
   AuthenticateddashboardMiddleDashboardRoute: typeof AuthenticateddashboardMiddleDashboardRoute
   AuthenticateddashboardSeniorDashboardRoute: typeof AuthenticateddashboardSeniorDashboardRoute
+  AuthenticatedtaskTasksRoute: typeof AuthenticatedtaskTasksRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -170,6 +185,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticateddashboardMiddleDashboardRoute,
   AuthenticateddashboardSeniorDashboardRoute:
     AuthenticateddashboardSeniorDashboardRoute,
+  AuthenticatedtaskTasksRoute: AuthenticatedtaskTasksRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -186,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
   '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
+  '/tasks': typeof AuthenticatedtaskTasksRoute
 }
 
 export interface FileRoutesByTo {
@@ -198,6 +215,7 @@ export interface FileRoutesByTo {
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
   '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
+  '/tasks': typeof AuthenticatedtaskTasksRoute
 }
 
 export interface FileRoutesById {
@@ -211,6 +229,7 @@ export interface FileRoutesById {
   '/_authenticated/(dashboard)/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/_authenticated/(dashboard)/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
   '/_authenticated/(dashboard)/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
+  '/_authenticated/(task)/tasks': typeof AuthenticatedtaskTasksRoute
 }
 
 export interface FileRouteTypes {
@@ -225,6 +244,7 @@ export interface FileRouteTypes {
     | '/juniorDashboard'
     | '/middleDashboard'
     | '/seniorDashboard'
+    | '/tasks'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -236,6 +256,7 @@ export interface FileRouteTypes {
     | '/juniorDashboard'
     | '/middleDashboard'
     | '/seniorDashboard'
+    | '/tasks'
   id:
     | '__root__'
     | '/'
@@ -247,6 +268,7 @@ export interface FileRouteTypes {
     | '/_authenticated/(dashboard)/juniorDashboard'
     | '/_authenticated/(dashboard)/middleDashboard'
     | '/_authenticated/(dashboard)/seniorDashboard'
+    | '/_authenticated/(task)/tasks'
   fileRoutesById: FileRoutesById
 }
 
@@ -290,7 +312,8 @@ export const routeTree = rootRoute
         "/_authenticated/(dashboard)/clientDashboard",
         "/_authenticated/(dashboard)/juniorDashboard",
         "/_authenticated/(dashboard)/middleDashboard",
-        "/_authenticated/(dashboard)/seniorDashboard"
+        "/_authenticated/(dashboard)/seniorDashboard",
+        "/_authenticated/(task)/tasks"
       ]
     },
     "/signin": {
@@ -317,6 +340,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/(dashboard)/seniorDashboard": {
       "filePath": "_authenticated/(dashboard)/seniorDashboard.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/(task)/tasks": {
+      "filePath": "_authenticated/(task)/tasks.tsx",
       "parent": "/_authenticated"
     }
   }

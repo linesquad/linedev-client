@@ -3,6 +3,7 @@ import { getCurrentUser } from "../services/auth";
 
 interface User {
   id: string;
+  name: string;
 }
 
 export const useUser = () => {
