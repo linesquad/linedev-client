@@ -11,7 +11,7 @@ export default function SingleBlog({
   blog: any;
   onUpdated?: () => void;
 }) {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  
   const [isModalDelete, setIsModalDelete] = useState(false);
 
   const { mutate } = useDeleteBlogUser();

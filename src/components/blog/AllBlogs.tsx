@@ -13,6 +13,7 @@ import { usePaginatedBlogs } from "../../hooks/usePaginatedBlogs";
 import TableFooter from "./TableFooter";
 import BlogsSkeleton from "./skeletons/BlogsSkeleton";
 import { useNavigate } from "@tanstack/react-router";
+import toast from "react-hot-toast";
 
 type Blog = {
   _id: number;
@@ -73,7 +74,7 @@ export default function AllBlogs() {
   const tableData = useMemo<Blog[]>(() => {
     const blogs = pagination?.blogs ?? [];
     if (!search.trim()) return blogs;
-    return blogs.filter((blog: { title: string; }) =>
+    return blogs.filter((blog: { title: string }) =>
       blog.title.toLowerCase().includes(search.toLowerCase())
     );
   }, [pagination, search]);
@@ -146,6 +147,7 @@ export default function AllBlogs() {
         closeDeleteModal();
       },
     });
+    toast.success("Blog delete  successfully!");
   };
 
   return (

@@ -2,11 +2,14 @@ import { useForm } from "@tanstack/react-form";
 import { toast } from "react-hot-toast";
 import { useUpdateBlog } from "../../hooks/useUpdateBlog";
 import { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 interface UpdateProps {
   selectedBlog: any;
   setIsModalOpen: (open: boolean) => void;
 }
+
 type FormValues = {
   title: string;
   content: string;
@@ -14,6 +17,12 @@ type FormValues = {
   category: string;
   tags: string[];
   isFeatured: boolean;
+};
+
+const cleanHtml = (html: string) => {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
 };
 
 export default function UpdateBlog({
@@ -38,16 +47,31 @@ export default function UpdateBlog({
     onSubmit: async ({ value }) => {
       setSubmitAttempted(true);
 
+      const plainText = cleanHtml(value.content);
+
       if (!value.title.trim()) return;
-      if (!value.content.trim()) return;
+      if (!plainText.trim()) return;
       if (!value.image.trim()) return;
       if (!value.category.trim()) return;
       if (!value.tags || value.tags.length === 0) return;
 
+      const noChange =
+        value.title === blogData.title &&
+        value.content === blogData.content &&
+        value.image === blogData.image &&
+        value.category === blogData.category &&
+        JSON.stringify(value.tags) === JSON.stringify(blogData.tags) &&
+        value.isFeatured === blogData.isFeatured;
+
+      if (noChange) {
+        toast.error("No changes detected. Please modify at least one field.");
+        return;
+      }
+
       mutate({
         blogId: blogData._id,
         title: value.title,
-        content: value.content,
+        content: plainText, 
         author: blogData.author,
         tags: value.tags,
         image: value.image,
@@ -92,25 +116,26 @@ export default function UpdateBlog({
   };
 
   return (
-    <div className="bg-[#1f1f2b] text-white p-6 rounded-xl border border-[#AD46FF] shadow-2xl w-[90%] max-w-lg">
-      <h2 className="text-lg font-semibold">Update Blog Post</h2>
+    <div className="bg-[#1f1f2b] text-white p-6 rounded-xl border border-[#AD46FF] shadow-2xl w-[90%] max-w-2xl max-h-[90vh] overflow-y-auto">
+      <h2 className="text-xl font-bold mb-6">Update Blog Post</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           form.handleSubmit();
         }}
-        className="space-y-4"
+        className="space-y-6"
       >
+       
         <form.Field name="title">
           {(field) => (
             <div>
-              <label>Title</label>
+              <label className="block mb-1 font-medium">Title</label>
               <input
                 type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className={`w-full border px-3 py-2 rounded ${
-                  showError("title") ? "border-red-500" : ""
+                className={`w-full bg-[#2b2b3c] text-white border px-4 py-2 rounded outline-none ${
+                  showError("title") ? "border-red-500" : "border-gray-500"
                 }`}
               />
               {showError("title") && (
@@ -120,16 +145,16 @@ export default function UpdateBlog({
           )}
         </form.Field>
 
+    
         <form.Field name="content">
           {(field) => (
             <div>
-              <label>Content</label>
-              <textarea
+              <label className="block mb-1 font-medium">Content</label>
+              <ReactQuill
                 value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className={`w-full border px-3 py-2 rounded ${
-                  showError("content") ? "border-red-500" : ""
-                }`}
+                onChange={(val) => field.handleChange(val)}
+                className=" bg-white/5 backdrop-blur-sm border border-white/20 rounded"
+                theme="snow"
               />
               {showError("content") && (
                 <p className="text-red-500 text-xs mt-1">Content is required</p>
@@ -138,16 +163,17 @@ export default function UpdateBlog({
           )}
         </form.Field>
 
+     
         <form.Field name="image">
           {(field) => (
             <div>
-              <label>Image URL</label>
+              <label className="block mb-1 font-medium">Image URL</label>
               <input
                 type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className={`w-full border px-3 py-2 rounded ${
-                  showError("image") ? "border-red-500" : ""
+                className={`w-full bg-[#2b2b3c] text-white border px-4 py-2 rounded outline-none ${
+                  showError("image") ? "border-red-500" : "border-gray-500"
                 }`}
               />
               {showError("image") && (
@@ -157,16 +183,17 @@ export default function UpdateBlog({
           )}
         </form.Field>
 
+       
         <form.Field name="category">
           {(field) => (
             <div>
-              <label>Category</label>
+              <label className="block mb-1 font-medium">Category</label>
               <input
                 type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className={`w-full border px-3 py-2 rounded ${
-                  showError("category") ? "border-red-500" : ""
+                className={`w-full bg-[#2b2b3c] text-white border px-4 py-2 rounded outline-none ${
+                  showError("category") ? "border-red-500" : "border-gray-500"
                 }`}
               />
               {showError("category") && (
@@ -178,18 +205,19 @@ export default function UpdateBlog({
           )}
         </form.Field>
 
+        
         <div>
-          <label className="block font-medium mb-1">Tags</label>
+          <label className="block mb-1 font-medium">Tags</label>
           <input
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
             onKeyDown={handleAddTag}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full bg-[#2b2b3c] text-white border border-gray-500 px-4 py-2 rounded outline-none"
             placeholder="Type tag and press Enter"
           />
           <form.Field name="tags">
             {(field) => (
-              <div className="flex flex-wrap mt-2 gap-2">
+              <div className="flex flex-wrap gap-2 mt-2">
                 {field.state.value?.map((tag: string) => (
                   <span
                     key={tag}
@@ -215,31 +243,33 @@ export default function UpdateBlog({
           )}
         </div>
 
+      
         <form.Field name="isFeatured">
           {(field) => (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={field.state.value}
                 onChange={(e) => field.handleChange(e.target.checked)}
               />
-              <label>Featured</label>
+              <label className="font-medium">Featured</label>
             </div>
           )}
         </form.Field>
 
-        <div className="flex justify-end space-x-2">
+     
+        <div className="flex justify-end gap-3">
           <button
             type="button"
             onClick={() => setIsModalOpen(false)}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-500 rounded text-white hover:bg-gray-600"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+            className="px-4 py-2 bg-purple-600 rounded text-white hover:bg-purple-700"
           >
             {isPending ? "Updating..." : "Update"}
           </button>
