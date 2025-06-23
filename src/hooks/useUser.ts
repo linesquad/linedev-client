@@ -12,7 +12,6 @@ export const useUser = () => {
     queryFn: () => getCurrentUser(),
   });
 
-  console.log(data);
 
   return {
     user: data,
