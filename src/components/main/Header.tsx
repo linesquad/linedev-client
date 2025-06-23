@@ -93,11 +93,11 @@ function Header({ user, onLogout, role }: HeaderProps) {
             {user &&
               (role === "middle" || role === "senior" || role === "junior") && (
                 <Link
-                  to="/tasks"
+                  to="/projects"
                   className="block font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 py-3"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Tasks
+                  Projects
                 </Link>
               )}
 
