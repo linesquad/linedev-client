@@ -3,6 +3,8 @@ import { useCreateProject } from "../../hooks/useTasks";
 import { useForm } from "@tanstack/react-form";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import ErrorDisplay from "../ErrorDisplay";
+import Spinner from "../Spinner";
 
 function ProjectForm({ onClose }: { onClose: () => void }) {
   const { createProject, isPending, isError } = useCreateProject();
@@ -54,22 +56,20 @@ function ProjectForm({ onClose }: { onClose: () => void }) {
   });
 
   if (isPending) {
-    return <div className="text-red-500">Creating project...</div>;
+    return <Spinner size="lg" color="blue" text="Creating project..." />;
   }
 
   if (isError) {
-    return <div className="text-red-500">Error creating project</div>;
+    return <ErrorDisplay message="Error creating project" />;
   }
 
   const validateFile = (file: File) => {
-    // Check file size (max 5MB)
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
     if (file.size > maxSize) {
       toast.error("File size must be less than 5MB");
       return false;
     }
 
-    // Check file type
     const allowedTypes = [
       "image/jpeg",
       "image/jpg",
@@ -122,8 +122,6 @@ function ProjectForm({ onClose }: { onClose: () => void }) {
         toast.error("Please select a file");
         return;
       }
-
-      console.log(file);
 
       if (!validateFile(file)) {
         return;

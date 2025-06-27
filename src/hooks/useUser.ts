@@ -7,7 +7,7 @@ interface User {
 }
 
 export const useUser = () => {
-  const { data, isLoading, error } = useQuery<User>({
+  const { data, isLoading, error, isError } = useQuery<User>({
     queryKey: ["user"],
     queryFn: () => getCurrentUser(),
   });
@@ -17,5 +17,6 @@ export const useUser = () => {
     user: data,
     isLoading,
     error,
+    isError,
   };
 };

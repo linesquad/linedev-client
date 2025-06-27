@@ -1,9 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useUser } from "../../../hooks/useUser";
 import { useProjects } from "../../../hooks/useTasks";
-import ProjectCard from "../../../components/tasks/ProjectCard";
-import ProjectForm from "../../../components/tasks/ProjectForm";
+import ProjectCard from "../../../components/projects/ProjectCard";
+import ProjectForm from "../../../components/projects/ProjectForm";
+import ProjectSkeleton from "../../../components/projects/ProjectSkeleton";
 import { useState, useEffect } from "react";
+import ErrorDisplay from "../../../components/ErrorDisplay";
+
 export const Route = createFileRoute("/_authenticated/(task)/projects")({
   component: ProjectsPage,
 });
@@ -44,7 +47,11 @@ function ProjectsPage() {
   }
 
   if (user.isLoading) {
-    return <div className="text-center py-12 text-white">Loading...</div>;
+    return <ProjectSkeleton />;
+  }
+
+  if (user.isError) {
+    return <ErrorDisplay message="Failed to load user. Please try again." />;
   }
 
   if (!user.user || !user.user.name) {
@@ -52,10 +59,11 @@ function ProjectsPage() {
   }
 
   if (isLoadingProjects) {
-    return <div className="text-red-500">Projects Loading...</div>;
+    return <ProjectSkeleton />;
   }
+
   if (errorProjects) {
-    return <div className="text-red-500">Projects Error</div>;
+    return <ErrorDisplay message="Failed to load projects. Please try again." />;
   }
 
   const handleProjectFormOpen = () => {
