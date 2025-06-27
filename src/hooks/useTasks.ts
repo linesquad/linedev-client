@@ -28,11 +28,11 @@ export const useProjects = () => {
     isLoading,
     error,
   };
-};  
+};
 
-export const useCreateProject = () => {
+export const  useCreateProject = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending, isError } = useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
@@ -42,6 +42,6 @@ export const useCreateProject = () => {
   return {
     createProject: mutate,
     isPending,
-    error,
+    isError,
   };
 };

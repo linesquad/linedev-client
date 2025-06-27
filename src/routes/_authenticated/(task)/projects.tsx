@@ -51,15 +51,11 @@ function ProjectsPage() {
     return null;
   }
 
-
-
   if (isLoadingProjects) {
-    return (
-      <div className="text-center py-12 text-white">Projects Loading...</div>
-    );
+    return <div className="text-red-500">Projects Loading...</div>;
   }
   if (errorProjects) {
-    return <div className="text-center py-12 text-white">Projects Error</div>;
+    return <div className="text-red-500">Projects Error</div>;
   }
 
   const handleProjectFormOpen = () => {
