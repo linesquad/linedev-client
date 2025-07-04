@@ -5,7 +5,6 @@ import { HiMenu, HiX } from "react-icons/hi";
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
@@ -19,7 +18,6 @@ export default function Sidebar() {
 
   return (
     <>
-     
       <button
         className="md:hidden text-white p-4 z-40 fixed top-[88px] left-4"
         onClick={() => setIsOpen(!isOpen)}
@@ -27,7 +25,6 @@ export default function Sidebar() {
         {isOpen ? <HiX size={28} /> : <HiMenu size={28} />}
       </button>
 
-    
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
@@ -35,7 +32,6 @@ export default function Sidebar() {
         />
       )}
 
-     
       <div
         className={`fixed top-[80px] left-0 h-[calc(100vh-80px)] w-64 bg-[#1C1A25] text-white px-6 py-8 transform transition-transform duration-300 z-40
         ${isOpen ? "translate-x-0" : "-translate-x-full"} 

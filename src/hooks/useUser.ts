@@ -3,19 +3,20 @@ import { getCurrentUser } from "../services/auth";
 
 interface User {
   id: string;
+  name: string;
 }
 
 export const useUser = () => {
-  const { data, isLoading, error } = useQuery<User>({
+  const { data, isLoading, error, isError } = useQuery<User>({
     queryKey: ["user"],
     queryFn: () => getCurrentUser(),
   });
 
-  console.log(data);
 
   return {
     user: data,
     isLoading,
     error,
+    isError,
   };
 };

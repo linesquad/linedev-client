@@ -24,6 +24,7 @@ import { Route as BlogAllImport } from './routes/blog/all'
 import { Route as BlogIdImport } from './routes/blog/$id'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 import { Route as BlogUpdatedBlogIdImport } from './routes/blog/updatedBlog/$id'
+import { Route as AuthenticatedtaskProjectsImport } from './routes/_authenticated/(task)/projects'
 import { Route as AuthenticateddashboardSeniorDashboardImport } from './routes/_authenticated/(dashboard)/seniorDashboard'
 import { Route as AuthenticateddashboardMiddleDashboardImport } from './routes/_authenticated/(dashboard)/middleDashboard'
 import { Route as AuthenticateddashboardJuniorDashboardImport } from './routes/_authenticated/(dashboard)/juniorDashboard'
@@ -106,6 +107,12 @@ const BlogUpdatedBlogIdRoute = BlogUpdatedBlogIdImport.update({
   id: '/updatedBlog/$id',
   path: '/updatedBlog/$id',
   getParentRoute: () => BlogRouteRoute,
+} as any)
+
+const AuthenticatedtaskProjectsRoute = AuthenticatedtaskProjectsImport.update({
+  id: '/(task)/projects',
+  path: '/projects',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const AuthenticateddashboardSeniorDashboardRoute =
@@ -252,6 +259,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticateddashboardSeniorDashboardImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/(task)/projects': {
+      id: '/_authenticated/(task)/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof AuthenticatedtaskProjectsImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/blog/updatedBlog/$id': {
       id: '/blog/updatedBlog/$id'
       path: '/updatedBlog/$id'
@@ -294,6 +308,7 @@ interface AuthenticatedRouteChildren {
   AuthenticateddashboardJuniorDashboardRoute: typeof AuthenticateddashboardJuniorDashboardRoute
   AuthenticateddashboardMiddleDashboardRoute: typeof AuthenticateddashboardMiddleDashboardRoute
   AuthenticateddashboardSeniorDashboardRoute: typeof AuthenticateddashboardSeniorDashboardRoute
+  AuthenticatedtaskProjectsRoute: typeof AuthenticatedtaskProjectsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -306,6 +321,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticateddashboardMiddleDashboardRoute,
   AuthenticateddashboardSeniorDashboardRoute:
     AuthenticateddashboardSeniorDashboardRoute,
+  AuthenticatedtaskProjectsRoute: AuthenticatedtaskProjectsRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -329,6 +345,7 @@ export interface FileRoutesByFullPath {
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
   '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
+  '/projects': typeof AuthenticatedtaskProjectsRoute
   '/blog/updatedBlog/$id': typeof BlogUpdatedBlogIdRoute
 }
 
@@ -348,6 +365,7 @@ export interface FileRoutesByTo {
   '/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
   '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
+  '/projects': typeof AuthenticatedtaskProjectsRoute
   '/blog/updatedBlog/$id': typeof BlogUpdatedBlogIdRoute
 }
 
@@ -369,6 +387,7 @@ export interface FileRoutesById {
   '/_authenticated/(dashboard)/juniorDashboard': typeof AuthenticateddashboardJuniorDashboardRoute
   '/_authenticated/(dashboard)/middleDashboard': typeof AuthenticateddashboardMiddleDashboardRoute
   '/_authenticated/(dashboard)/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
+  '/_authenticated/(task)/projects': typeof AuthenticatedtaskProjectsRoute
   '/blog/updatedBlog/$id': typeof BlogUpdatedBlogIdRoute
 }
 
@@ -391,6 +410,7 @@ export interface FileRouteTypes {
     | '/juniorDashboard'
     | '/middleDashboard'
     | '/seniorDashboard'
+    | '/projects'
     | '/blog/updatedBlog/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -409,6 +429,7 @@ export interface FileRouteTypes {
     | '/juniorDashboard'
     | '/middleDashboard'
     | '/seniorDashboard'
+    | '/projects'
     | '/blog/updatedBlog/$id'
   id:
     | '__root__'
@@ -428,6 +449,7 @@ export interface FileRouteTypes {
     | '/_authenticated/(dashboard)/juniorDashboard'
     | '/_authenticated/(dashboard)/middleDashboard'
     | '/_authenticated/(dashboard)/seniorDashboard'
+    | '/_authenticated/(task)/projects'
     | '/blog/updatedBlog/$id'
   fileRoutesById: FileRoutesById
 }
@@ -487,7 +509,8 @@ export const routeTree = rootRoute
         "/_authenticated/(dashboard)/clientDashboard",
         "/_authenticated/(dashboard)/juniorDashboard",
         "/_authenticated/(dashboard)/middleDashboard",
-        "/_authenticated/(dashboard)/seniorDashboard"
+        "/_authenticated/(dashboard)/seniorDashboard",
+        "/_authenticated/(task)/projects"
       ]
     },
     "/signin": {
@@ -538,6 +561,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/(dashboard)/seniorDashboard": {
       "filePath": "_authenticated/(dashboard)/seniorDashboard.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/(task)/projects": {
+      "filePath": "_authenticated/(task)/projects.tsx",
       "parent": "/_authenticated"
     },
     "/blog/updatedBlog/$id": {
