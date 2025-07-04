@@ -14,6 +14,7 @@ export default function Sidebar() {
     { to: "/blog/profile", label: "👤 Profile" },
     { to: "/blog/month", label: "📅 Month" },
     { to: "/blog/all", label: "📚 All Blogs" },
+    { to: "/blog/course", label: "📅 course" },
   ];
 
   return (

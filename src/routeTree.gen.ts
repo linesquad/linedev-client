@@ -23,6 +23,7 @@ import { Route as BlogMainImport } from './routes/blog/main'
 import { Route as BlogAllImport } from './routes/blog/all'
 import { Route as BlogIdImport } from './routes/blog/$id'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
+import { Route as BlogCourseIndexImport } from './routes/blog/course/index'
 import { Route as BlogUpdatedBlogIdImport } from './routes/blog/updatedBlog/$id'
 import { Route as AuthenticatedtaskProjectsImport } from './routes/_authenticated/(task)/projects'
 import { Route as AuthenticateddashboardSeniorDashboardImport } from './routes/_authenticated/(dashboard)/seniorDashboard'
@@ -101,6 +102,12 @@ const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const BlogCourseIndexRoute = BlogCourseIndexImport.update({
+  id: '/course/',
+  path: '/course/',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 
 const BlogUpdatedBlogIdRoute = BlogUpdatedBlogIdImport.update({
@@ -273,6 +280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogUpdatedBlogIdImport
       parentRoute: typeof BlogRouteImport
     }
+    '/blog/course/': {
+      id: '/blog/course/'
+      path: '/course'
+      fullPath: '/blog/course'
+      preLoaderRoute: typeof BlogCourseIndexImport
+      parentRoute: typeof BlogRouteImport
+    }
   }
 }
 
@@ -286,6 +300,7 @@ interface BlogRouteRouteChildren {
   BlogProfileRoute: typeof BlogProfileRoute
   BlogIndexRoute: typeof BlogIndexRoute
   BlogUpdatedBlogIdRoute: typeof BlogUpdatedBlogIdRoute
+  BlogCourseIndexRoute: typeof BlogCourseIndexRoute
 }
 
 const BlogRouteRouteChildren: BlogRouteRouteChildren = {
@@ -296,6 +311,7 @@ const BlogRouteRouteChildren: BlogRouteRouteChildren = {
   BlogProfileRoute: BlogProfileRoute,
   BlogIndexRoute: BlogIndexRoute,
   BlogUpdatedBlogIdRoute: BlogUpdatedBlogIdRoute,
+  BlogCourseIndexRoute: BlogCourseIndexRoute,
 }
 
 const BlogRouteRouteWithChildren = BlogRouteRoute._addFileChildren(
@@ -347,6 +363,7 @@ export interface FileRoutesByFullPath {
   '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
   '/projects': typeof AuthenticatedtaskProjectsRoute
   '/blog/updatedBlog/$id': typeof BlogUpdatedBlogIdRoute
+  '/blog/course': typeof BlogCourseIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -367,6 +384,7 @@ export interface FileRoutesByTo {
   '/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
   '/projects': typeof AuthenticatedtaskProjectsRoute
   '/blog/updatedBlog/$id': typeof BlogUpdatedBlogIdRoute
+  '/blog/course': typeof BlogCourseIndexRoute
 }
 
 export interface FileRoutesById {
@@ -389,6 +407,7 @@ export interface FileRoutesById {
   '/_authenticated/(dashboard)/seniorDashboard': typeof AuthenticateddashboardSeniorDashboardRoute
   '/_authenticated/(task)/projects': typeof AuthenticatedtaskProjectsRoute
   '/blog/updatedBlog/$id': typeof BlogUpdatedBlogIdRoute
+  '/blog/course/': typeof BlogCourseIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -412,6 +431,7 @@ export interface FileRouteTypes {
     | '/seniorDashboard'
     | '/projects'
     | '/blog/updatedBlog/$id'
+    | '/blog/course'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -431,6 +451,7 @@ export interface FileRouteTypes {
     | '/seniorDashboard'
     | '/projects'
     | '/blog/updatedBlog/$id'
+    | '/blog/course'
   id:
     | '__root__'
     | '/'
@@ -451,6 +472,7 @@ export interface FileRouteTypes {
     | '/_authenticated/(dashboard)/seniorDashboard'
     | '/_authenticated/(task)/projects'
     | '/blog/updatedBlog/$id'
+    | '/blog/course/'
   fileRoutesById: FileRoutesById
 }
 
@@ -499,7 +521,8 @@ export const routeTree = rootRoute
         "/blog/month",
         "/blog/profile",
         "/blog/",
-        "/blog/updatedBlog/$id"
+        "/blog/updatedBlog/$id",
+        "/blog/course/"
       ]
     },
     "/_authenticated": {
@@ -569,6 +592,10 @@ export const routeTree = rootRoute
     },
     "/blog/updatedBlog/$id": {
       "filePath": "blog/updatedBlog/$id.tsx",
+      "parent": "/blog"
+    },
+    "/blog/course/": {
+      "filePath": "blog/course/index.tsx",
       "parent": "/blog"
     }
   }
